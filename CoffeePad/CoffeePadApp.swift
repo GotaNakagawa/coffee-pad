@@ -1,10 +1,3 @@
-//
-//  CoffeePadApp.swift
-//  CoffeePad
-//
-//  Created by 中川豪太 on 2025/05/11.
-//
-
 import SwiftUI
 import SwiftData
 
