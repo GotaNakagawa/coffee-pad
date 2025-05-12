@@ -3,21 +3,31 @@ import Inject
 
 struct CreateView: View {
     @ObserveInjection var inject
-    @State private var selectedStep: BrewStepType = .pour // 初期値
+    @State private var selectedStep: BrewStepType = .pour
     @State private var steps: [BrewStepType] = []
+    @State private var draggedItem: BrewStepType? = nil
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("淹れ方")
                 .font(.headline)
             VStack(alignment: .leading, spacing: 10) {
-                ForEach(steps.indices, id: \.self) { index in
-                    Text("\(index + 1). \(steps[index].rawValue)")
+                ForEach(steps, id: \.self) { step in
+                    Text(step.rawValue)
                         .padding()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.white)
                         .cornerRadius(8)
                         .shadow(radius: 1)
+                        .onDrag {
+                            self.draggedItem = step
+                            return NSItemProvider(object: NSString(string: step.rawValue))
+                        }
+                        .onDrop(of: [.text], delegate: StepDropDelegate(
+                            item: step,
+                            items: $steps,
+                            draggedItem: $draggedItem
+                        ))
                 }
             }
             Spacer()

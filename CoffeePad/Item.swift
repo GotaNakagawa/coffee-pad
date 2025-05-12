@@ -17,7 +17,7 @@ final class Item {
     }
 }
 
-enum BrewStepType: String, CaseIterable, Codable {
+enum BrewStepType: String, CaseIterable, Codable, Equatable {
     case pour = "注ぐ"
     case wait = "待つ"
     case ice = "氷を入れる"
