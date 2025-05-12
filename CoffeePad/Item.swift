@@ -16,3 +16,10 @@ final class Item {
         self.timestamp = timestamp
     }
 }
+
+enum BrewStepType: String, CaseIterable, Codable {
+    case pour = "注ぐ"
+    case wait = "待つ"
+    case ice = "氷を入れる"
+    case stir = "かき混ぜる"
+}

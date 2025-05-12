@@ -1,7 +1,9 @@
 import SwiftUI
 import SwiftData
+import Inject
 
 struct ViewItemsView: View {
+    @ObserveInjection var inject
     @Environment(\.modelContext) private var modelContext
     @Query private var items: [Item]
 
@@ -29,6 +31,7 @@ struct ViewItemsView: View {
                 }
             }
         }
+        .enableInjection()
     }
 
     private func addItem() {
