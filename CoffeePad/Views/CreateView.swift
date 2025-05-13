@@ -63,13 +63,21 @@ struct CreateView: View {
                 .cornerRadius(8)
             }
             
-            if selectedType == .pour {
+            switch selectedType {
+            case .pour:
                 PourStepDetailView(
                     selectedCircle: $selectedCircle,
                     amount: $amount,
                     duration: $duration
                 )
+            case .stir:
+                StirStepDetailView(duration: $duration)
+            case .wait:
+                WaitStepDetailView(duration: $duration)
+            default:
+                EmptyView()
             }
+
 
             Button(action: {
                 let newStep = BrewStep(
