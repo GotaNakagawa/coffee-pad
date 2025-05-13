@@ -21,7 +21,7 @@ enum PourCircleSize: String, CaseIterable, Codable, Identifiable {
 enum BrewStepType: String, CaseIterable, Codable, Identifiable {
     var id: String { rawValue }
 
-    case pour = "水を注ぐ"
+    case pour = "お湯を注ぐ"
     case wait = "待つ"
     case ice = "氷を入れる"
     case stir = "かき混ぜる"
