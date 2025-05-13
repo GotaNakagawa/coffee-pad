@@ -74,8 +74,8 @@ struct CreateView: View {
                 StirStepDetailView(duration: $duration)
             case .wait:
                 WaitStepDetailView(duration: $duration)
-            default:
-                EmptyView()
+            case .ice:
+                IceStepDetailView(amount: $amount)
             }
 
 
@@ -83,7 +83,7 @@ struct CreateView: View {
                 let newStep = BrewStep(
                     type: selectedType,
                     circleSize: selectedType == .pour ? selectedCircle : nil,
-                    amount: selectedType == .pour ? amount : nil,
+                    amount: selectedType == .pour || selectedType == .ice ? amount : nil,
                     duration: (selectedType == .pour || selectedType == .wait || selectedType == .stir) ? duration : nil
                 )
                 steps.append(newStep)
