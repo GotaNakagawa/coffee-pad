@@ -3,6 +3,7 @@ import Inject
 
 struct ExtractionListView: View {
     @ObserveInjection var inject
+    @Environment(\.dismiss) private var dismiss
 
     let methods: [ExtractionMethod] = [
         .init(id: 1, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
@@ -29,11 +30,14 @@ struct ExtractionListView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                 }
                 .overlay(
-                    Image("hamburgerIcon")
+                    Image(systemName: "chevron.left")
                         .resizable()
-                        .renderingMode(.original)
-                        .frame(width: 18, height: 14)
-                        .padding(.leading, 6),
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 12, height: 20)
+                        .padding(.leading, 6)
+                        .onTapGesture {
+                            dismiss()
+                        },
                     alignment: .leading
                 )
                 .padding(.top, 16)
