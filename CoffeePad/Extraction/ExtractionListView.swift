@@ -82,12 +82,36 @@ struct ExtractionListView: View {
                                             .foregroundColor(.gray)
 
                                         HStack(spacing: 16) {
-                                            Label("\(method.amount)ml", systemImage: "cup.and.saucer.fill")
-                                            Label(method.grind, systemImage: "circle.dotted")
-                                            Label("\(method.temp)℃", systemImage: "thermometer")
-                                            Label("\(method.weight)g", systemImage: "scalemass")
+                                            HStack(spacing: 4) {
+                                                Image("coffeeCupIcon")
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
+                                                Text("\(method.amount)ml")
+                                            }
+
+                                            HStack(spacing: 4) {
+                                                Image("groundCoffeeIcon")
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
+                                                Text(method.grind)
+                                            }
+
+                                            HStack(spacing: 4) {
+                                                Image("thermometerIcon")
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
+                                                Text("\(method.temp)℃")
+                                            }
+
+                                            HStack(spacing: 4) {
+                                                Image("scaleIcon")
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
+                                                Text("\(method.weight)g")
+                                            }
                                         }
                                         .font(.caption)
+
                                     }
                                     .padding()
                                     .frame(maxWidth: .infinity, alignment: .leading)
