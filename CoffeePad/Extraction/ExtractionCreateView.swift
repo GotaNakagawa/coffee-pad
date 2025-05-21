@@ -3,6 +3,7 @@ import Inject
 
 struct ExtractionCreateView: View {
     @ObserveInjection var inject
+    @Environment(\.dismiss) private var dismiss
     @State private var currentStep = 0
     private let totalSteps = 4
 
@@ -33,7 +34,19 @@ struct ExtractionCreateView: View {
         VStack(spacing: 20) {
             ProgressView(value: Double(currentStep + 1), total: Double(totalSteps))
                 .progressViewStyle(LinearProgressViewStyle(tint: Color("DarkBrown")))
-                .padding()
+                .padding(.horizontal)
+            
+            HStack {
+                Image(systemName: "chevron.left")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 12, height: 20)
+                    .padding(.leading, 20)
+                    .onTapGesture {
+                        dismiss()
+                    }
+                Spacer()
+            }
 
             Group {
                 switch currentStep {
@@ -99,6 +112,7 @@ struct ExtractionCreateView: View {
         .navigationBarBackButtonHidden(true)
         .enableInjection()
     }
+    
 }
 
 struct StepTextFieldView: View {
@@ -148,12 +162,28 @@ struct StepPickerView: View {
                 .font(.body)
                 .foregroundColor(.gray)
 
-            Picker(selection: $selection, label: Text("")) {
+            VStack(spacing: 12) {
                 ForEach(options, id: \.self) { option in
-                    Text(option)
+                    Button(action: {
+                        selection = option
+                    }) {
+                        HStack {
+                            Text(option)
+                                .foregroundColor(.primary)
+                            Spacer()
+                            if selection == option {
+                                Image(systemName: "checkmark")
+                                    .foregroundColor(.primary)
+                            }
+                        }
+                        .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(selection == option ? Color("DarkBrown") : Color.gray.opacity(0.5), lineWidth: 3)
+                        )
+                    }
                 }
             }
-            .pickerStyle(.segmented)
         }
         .padding()
     }
