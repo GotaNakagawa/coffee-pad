@@ -17,6 +17,7 @@ struct ExtractionListView: View {
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
+        Color("DarkBrown"),
         Color("DarkBrown")
     ]
 

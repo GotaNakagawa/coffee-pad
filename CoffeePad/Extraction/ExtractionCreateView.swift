@@ -43,7 +43,11 @@ struct ExtractionCreateView: View {
                     .frame(width: 12, height: 20)
                     .padding(.leading, 20)
                     .onTapGesture {
-                        dismiss()
+                        if currentStep > 0 {
+                            currentStep -= 1
+                        } else {
+                            dismiss()
+                        }
                     }
                 Spacer()
             }
