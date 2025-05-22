@@ -77,7 +77,7 @@ struct ExtractionCreateView: View {
                         title: "お湯の温度は？",
                         description: "温度を℃で入力してください",
                         text: $waterTemp,
-                        placeholder: "92",
+                        placeholder: "90",
                         keyboardType: .numberPad
                     )
                 default:
@@ -122,6 +122,8 @@ struct StepTextFieldView: View {
     let placeholder: String
     var keyboardType: UIKeyboardType = .default
 
+    @FocusState private var isFocused: Bool
+
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(title)
@@ -133,9 +135,17 @@ struct StepTextFieldView: View {
                 .foregroundColor(.gray)
 
             VStack(spacing: 4) {
-                TextField(placeholder, text: $text)
-                    .keyboardType(keyboardType)
-                    .padding(.vertical, 8)
+                VStack {
+                    TextField(placeholder, text: $text)
+                        .keyboardType(keyboardType)
+                        .padding(.vertical, 8)
+                        .focused($isFocused)
+                }
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    isFocused = true
+                }
+
                 Rectangle()
                     .frame(height: 1)
                     .foregroundColor(.gray.opacity(0.5))
