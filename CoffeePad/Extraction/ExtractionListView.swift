@@ -24,122 +24,17 @@ struct ExtractionListView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 16) {
-                ZStack {
-                    Text("抽出メソッド")
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                }
-                .overlay(
-                    Image(systemName: "chevron.left")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 12, height: 20)
-                        .padding(.leading, 6)
-                        .onTapGesture {
-                            dismiss()
-                        },
-                    alignment: .leading
-                )
-                .padding(.top, 16)
+                ExtractionListHeader()
                 
                 Spacer()
                 
-
-                HStack(spacing: 16) {
-                    VStack {
-                        Text("2件").bold()
-                        Text("今月の作成数").font(.caption).foregroundColor(.gray)
-                    }
-
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.4))
-                        .frame(width: 1, height: 30)
-                        .cornerRadius(0.5)
-
-                    VStack {
-                        Text("3件").bold()
-                        Text("総作成数").font(.caption).foregroundColor(.gray)
-                    }
-                }
+                ExtractionStatsView()
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
                         ForEach(Array(methods.enumerated()), id: \.1.id) { index, method in
                             let color = colors[index % colors.count]
-
-                            ZStack {
-                                RoundedRectangle(cornerRadius: 20)
-                                    .fill(color)
-                                    .shadow(radius: 4)
-
-                                VStack(spacing: 0) {
-                                    VStack(alignment: .leading, spacing: 8) {
-                                        Text(method.title)
-                                            .font(.headline)
-
-                                        Text(method.comment)
-                                            .font(.caption)
-                                            .foregroundColor(.gray)
-
-                                        HStack(spacing: 16) {
-                                            HStack(spacing: 4) {
-                                                Image("coffeeCupIcon")
-                                                    .resizable()
-                                                    .frame(width: 16, height: 16)
-                                                Text("\(method.amount)ml")
-                                            }
-
-                                            HStack(spacing: 4) {
-                                                Image("groundCoffeeIcon")
-                                                    .resizable()
-                                                    .frame(width: 16, height: 16)
-                                                Text(method.grind)
-                                            }
-
-                                            HStack(spacing: 4) {
-                                                Image("thermometerIcon")
-                                                    .resizable()
-                                                    .frame(width: 16, height: 16)
-                                                Text("\(method.temp)℃")
-                                            }
-
-                                            HStack(spacing: 4) {
-                                                Image("scaleIcon")
-                                                    .resizable()
-                                                    .frame(width: 16, height: 16)
-                                                Text("\(method.weight)g")
-                                            }
-                                        }
-                                        .font(.caption)
-
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .background(Color.white)
-                                    .cornerRadius(12)
-                                    .shadow(radius: 1)
-                                    .padding(.horizontal, 8)
-                                    .padding(.top, 8)
-                                    .padding(.bottom, 8)
-
-                                    HStack {
-                                        Text(method.date)
-                                            .font(.footnote)
-                                            .bold()
-                                            .foregroundColor(.white)
-                                        Spacer()
-                                        HStack(spacing: 4) {
-                                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                                        }
-                                    }
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                }
-                            }
-                            .frame(maxWidth: .infinity)
+                            ExtractionMethodRow(method: method, color: color)
                         }
                     }
                 }
@@ -159,6 +54,132 @@ struct ExtractionListView: View {
         }
         .navigationBarHidden(true)
         .enableInjection()
+    }
+}
+
+struct ExtractionStatsView: View {
+    var body: some View {
+        HStack(spacing: 16) {
+            VStack {
+                Text("2件").bold()
+                Text("今月の作成数").font(.caption).foregroundColor(.gray)
+            }
+
+            Rectangle()
+                .fill(Color.gray.opacity(0.4))
+                .frame(width: 1, height: 30)
+                .cornerRadius(0.5)
+
+            VStack {
+                Text("3件").bold()
+                Text("総作成数").font(.caption).foregroundColor(.gray)
+            }
+        }
+    }
+}
+
+struct ExtractionListHeader: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        ZStack {
+            Text("抽出メソッド")
+                .font(.title2)
+                .fontWeight(.bold)
+                .frame(maxWidth: .infinity, alignment: .center)
+        }
+        .overlay(
+            Image(systemName: "chevron.left")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 12, height: 20)
+                .padding(.leading, 6)
+                .onTapGesture {
+                    dismiss()
+                },
+            alignment: .leading
+        )
+        .padding(.top, 16)
+    }
+}
+
+struct ExtractionMethodRow: View {
+    let method: ExtractionMethod
+    let color: Color
+
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 20)
+                .fill(color)
+                .shadow(radius: 4)
+
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(method.title)
+                        .font(.headline)
+
+                    Text(method.comment)
+                        .font(.caption)
+                        .foregroundColor(.gray)
+
+                    HStack(spacing: 16) {
+                        HStack(spacing: 4) {
+                            Image("coffeeCupIcon")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("\(method.amount)ml")
+                        }
+
+                        HStack(spacing: 4) {
+                            Image("groundCoffeeIcon")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text(method.grind)
+                        }
+
+                        HStack(spacing: 4) {
+                            Image("thermometerIcon")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("\(method.temp)℃")
+                        }
+
+                        HStack(spacing: 4) {
+                            Image("scaleIcon")
+                                .resizable()
+                                .frame(width: 16, height: 16)
+                            Text("\(method.weight)g")
+                        }
+                    }
+                    .font(.caption)
+
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color.white)
+                .cornerRadius(12)
+                .shadow(radius: 1)
+                .padding(.horizontal, 8)
+                .padding(.top, 8)
+                .padding(.bottom, 8)
+
+                HStack {
+                    Text(method.date)
+                        .font(.footnote)
+                        .bold()
+                        .foregroundColor(.white)
+                    Spacer()
+                    HStack(spacing: 4) {
+                        Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                        Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                        Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
