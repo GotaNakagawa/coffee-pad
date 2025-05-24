@@ -1,5 +1,5 @@
-import SwiftUI
 import Inject
+import SwiftUI
 
 struct BrewStepFlowView: View {
     @ObserveInjection var inject
@@ -67,12 +67,12 @@ struct StepDropDelegate: DropDelegate {
     @Binding var steps: [String]
     @Binding var draggedItem: String?
 
-    func performDrop(info: DropInfo) -> Bool {
+    func performDrop(info _: DropInfo) -> Bool {
         draggedItem = nil
         return true
     }
 
-    func dropEntered(info: DropInfo) {
+    func dropEntered(info _: DropInfo) {
         guard let draggedItem = draggedItem, draggedItem != item,
               let fromIndex = steps.firstIndex(of: draggedItem),
               let toIndex = steps.firstIndex(of: item) else { return }

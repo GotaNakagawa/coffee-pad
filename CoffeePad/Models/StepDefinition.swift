@@ -11,7 +11,7 @@ let stepDefinitions: [StepDefinition] = [
     StepDefinition(title: "お湯を注ぐ",
                    subOptions: [
                        "大きな円を描く", "小さな円を描く", "徐々に円を大きくする",
-                       "中心にまっすぐ注ぐ", "内側から外側へ渦を巻く", "外側から内側へ渦を巻く"
+                       "中心にまっすぐ注ぐ", "内側から外側へ渦を巻く", "外側から内側へ渦を巻く",
                    ],
                    needsTimeInput: true,
                    needsWeightInput: true),
@@ -34,5 +34,5 @@ let stepDefinitions: [StepDefinition] = [
     StepDefinition(title: "サーバーを空にする",
                    subOptions: nil,
                    needsTimeInput: false,
-                   needsWeightInput: false)
+                   needsWeightInput: false),
 ]

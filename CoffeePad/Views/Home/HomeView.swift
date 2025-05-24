@@ -1,5 +1,5 @@
-import SwiftUI
 import Inject
+import SwiftUI
 
 struct HomeView: View {
     @ObserveInjection var inject
@@ -25,7 +25,6 @@ struct HomeView: View {
                         alignment: .leading
                     )
                     .padding(.top, 16)
-
 
                     TabView(selection: $selectedPage) {
                         ForEach(carouselImages.indices, id: \.self) { index in

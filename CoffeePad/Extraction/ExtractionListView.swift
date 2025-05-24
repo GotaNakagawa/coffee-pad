@@ -1,5 +1,5 @@
-import SwiftUI
 import Inject
+import SwiftUI
 
 struct ExtractionListView: View {
     @ObserveInjection var inject
@@ -11,23 +11,23 @@ struct ExtractionListView: View {
         .init(id: 3, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日"),
         .init(id: 4, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
         .init(id: 5, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
-        .init(id: 6, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日")
+        .init(id: 6, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日"),
     ]
 
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
         Color("DarkBrown"),
-        Color("DarkBrown")
+        Color("DarkBrown"),
     ]
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 16) {
                 ExtractionListHeader()
-                
+
                 Spacer()
-                
+
                 ExtractionStatsView()
 
                 ScrollView(showsIndicators: false) {
@@ -152,7 +152,6 @@ struct ExtractionMethodRow: View {
                         }
                     }
                     .font(.caption)
-
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .leading)

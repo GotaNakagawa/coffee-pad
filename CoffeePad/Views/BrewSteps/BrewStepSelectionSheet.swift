@@ -1,6 +1,6 @@
-import SwiftUI
-import Inject
 import Foundation
+import Inject
+import SwiftUI
 
 struct BrewStepSelectionSheet: View {
     @ObserveInjection var inject

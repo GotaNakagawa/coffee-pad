@@ -1,5 +1,5 @@
-import SwiftUI
 import Inject
+import SwiftUI
 
 struct StepPickerView: View {
     @ObserveInjection var inject

@@ -1,5 +1,5 @@
-import SwiftUI
 import Inject
+import SwiftUI
 
 struct ExtractionCreateView: View {
     @ObserveInjection var inject
@@ -14,7 +14,7 @@ struct ExtractionCreateView: View {
     @State private var brewSteps: [String] = []
 
     let grindOptions = ["極細挽き", "細挽き", "中挽き", "粗挽き", "極粗挽き"]
-    
+
     var canProceedToNextStep: Bool {
         switch currentStep {
         case 0:
@@ -32,13 +32,12 @@ struct ExtractionCreateView: View {
         }
     }
 
-
     var body: some View {
         VStack(spacing: 20) {
             ProgressView(value: Double(currentStep + 1), total: Double(totalSteps))
                 .progressViewStyle(LinearProgressViewStyle(tint: Color("DarkBrown")))
                 .padding(.horizontal)
-            
+
             HStack {
                 Image(systemName: "chevron.left")
                     .resizable()
@@ -94,7 +93,7 @@ struct ExtractionCreateView: View {
                 }
             }
             .animation(.easeInOut, value: currentStep)
-            
+
             Spacer()
 
             Button(action: {
@@ -109,14 +108,11 @@ struct ExtractionCreateView: View {
                     .frame(maxWidth: .infinity)
                     .padding()
                     .background(canProceedToNextStep ? Color("DarkBrown") : Color("DarkBrown").opacity(0.3))
-
                     .cornerRadius(10)
                     .padding(.horizontal)
             }
             .disabled(!canProceedToNextStep)
             .padding(.bottom, 24)
-
-
         }
         .navigationBarBackButtonHidden(true)
         .enableInjection()
