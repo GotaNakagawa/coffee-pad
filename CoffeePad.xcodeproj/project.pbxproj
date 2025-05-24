@@ -122,6 +122,7 @@
 				8B6BC5B52DD03C3E00CC5808 /* Sources */,
 				8B6BC5B62DD03C3E00CC5808 /* Frameworks */,
 				8B6BC5B72DD03C3E00CC5808 /* Resources */,
+				8BB369612DE1CA9C00DB6FDD /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -218,6 +219,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				8B506F922DD09292008F20BA /* XCRemoteSwiftPackageReference "Inject" */,
+				8BB369392DE1C6EF00DB6FDD /* XCRemoteSwiftPackageReference "SwiftFormat" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8B6BC5BA2DD03C3E00CC5808 /* Products */;
@@ -276,6 +278,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed\"\nfi\n";
+		};
+		8BB369612DE1CA9C00DB6FDD /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [[ -e \"${BUILD_ROOT}/../../SourcePackages/checkouts/SwiftFormat/CommandLineTool/swiftformat\" ]]; then\n  \"${BUILD_ROOT}/../../SourcePackages/checkouts/SwiftFormat/CommandLineTool/swiftformat\" \"${SRCROOT}/CoffeePad\"\nelse\n  echo \"warning: SwiftFormat not found\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -615,6 +635,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 1.5.2;
+			};
+		};
+		8BB369392DE1C6EF00DB6FDD /* XCRemoteSwiftPackageReference "SwiftFormat" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nicklockwood/SwiftFormat";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.56.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
