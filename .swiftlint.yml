@@ -78,6 +78,10 @@ excluded:
   - Carthage
   - SourcePackages
   - Generated
+  
+closure_body_length:
+  warning: 50
+  error: 100
 
 line_length:
   warning: 300
