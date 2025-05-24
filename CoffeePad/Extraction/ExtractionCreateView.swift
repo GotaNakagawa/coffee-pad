@@ -5,12 +5,13 @@ struct ExtractionCreateView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
     @State private var currentStep = 0
-    private let totalSteps = 4
+    private let totalSteps = 5
 
     @State private var methodName: String = ""
     @State private var grindSize: String = "中挽き"
     @State private var coffeeAmount: String = ""
     @State private var waterTemp: String = ""
+    @State private var brewSteps: [String] = []
 
     let grindOptions = ["極細挽き", "細挽き", "中挽き", "粗挽き", "極粗挽き"]
     
@@ -24,6 +25,8 @@ struct ExtractionCreateView: View {
             return Int(coffeeAmount) != nil
         case 3:
             return Int(waterTemp) != nil
+        case 4:
+            return !brewSteps.isEmpty
         default:
             return true
         }
@@ -84,6 +87,8 @@ struct ExtractionCreateView: View {
                         placeholder: "90",
                         keyboardType: .numberPad
                     )
+                case 4:
+                    BrewStepFlowView(steps: $brewSteps)
                 default:
                     Text("完了！")
                 }
