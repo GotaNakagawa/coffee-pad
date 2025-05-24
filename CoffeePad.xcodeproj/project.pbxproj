@@ -10,6 +10,7 @@
 		8B506FA72DD094E0008F20BA /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 8B506FA62DD094E0008F20BA /* Inject */; };
 		8BB369102DE1A6D100DB6FDD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 8BB3690F2DE1A6D100DB6FDD /* README.md */; };
 		8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */; };
+		8BB369652DE1CE1800DB6FDD /* .swift-version in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369642DE1CE1800DB6FDD /* .swift-version */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +36,7 @@
 		8B6BC5D22DD03C4000CC5808 /* CoffeePadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeePadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8BB3690F2DE1A6D100DB6FDD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
+		8BB369642DE1CE1800DB6FDD /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -91,6 +93,7 @@
 		8B6BC5B02DD03C3E00CC5808 = {
 			isa = PBXGroup;
 			children = (
+				8BB369642DE1CE1800DB6FDD /* .swift-version */,
 				8B6BC5BB2DD03C3E00CC5808 /* CoffeePad */,
 				8B6BC5CB2DD03C4000CC5808 /* CoffeePadTests */,
 				8B6BC5D52DD03C4000CC5808 /* CoffeePadUITests */,
@@ -238,6 +241,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB369652DE1CE1800DB6FDD /* .swift-version in Resources */,
 				8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */,
 				8BB369102DE1A6D100DB6FDD /* README.md in Resources */,
 			);
