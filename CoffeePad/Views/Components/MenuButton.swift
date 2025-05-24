@@ -9,17 +9,17 @@ struct MenuButton: View {
         VStack(spacing: 8) {
             ZStack {
                 RoundedRectangle(cornerRadius: 12)
-                    .fill(backgroundColor)
+                    .fill(self.backgroundColor)
                     .frame(width: 64, height: 64)
                     .shadow(radius: 4)
 
-                Image(imageName)
+                Image(self.imageName)
                     .resizable()
                     .scaledToFit()
                     .frame(width: 50, height: 50)
             }
 
-            Text(title)
+            Text(self.title)
                 .font(.caption)
                 .foregroundColor(.primary)
         }

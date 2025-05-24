@@ -13,23 +13,30 @@ struct BrewStepFlowView: View {
                 .font(.title)
                 .bold()
 
-            if steps.isEmpty {
+            if self.steps.isEmpty {
                 Text("＋ボタンから手順を追加してください")
                     .foregroundColor(.gray)
             } else {
                 ScrollView {
                     LazyVStack(alignment: .leading, spacing: 8) {
-                        ForEach(steps, id: \.self) { step in
+                        ForEach(self.steps, id: \.self) { step in
                             Text("・\(step)")
                                 .padding()
                                 .background(Color.white)
                                 .cornerRadius(8)
                                 .shadow(radius: 2)
                                 .onDrag {
-                                    draggedItem = step
+                                    self.draggedItem = step
                                     return NSItemProvider(object: step as NSString)
                                 }
-                                .onDrop(of: [.text], delegate: StepDropDelegate(item: step, steps: $steps, draggedItem: $draggedItem))
+                                .onDrop(
+                                    of: [.text],
+                                    delegate: StepDropDelegate(
+                                        item: step,
+                                        steps: self.$steps,
+                                        draggedItem: self.$draggedItem
+                                    )
+                                )
                         }
                     }
                 }
@@ -39,7 +46,9 @@ struct BrewStepFlowView: View {
 
             HStack {
                 Spacer()
-                Button(action: { showSheet = true }) {
+                Button(action: {
+                    self.showSheet = true
+                }, label: {
                     Image(systemName: "plus")
                         .font(.title)
                         .foregroundColor(.black)
@@ -48,11 +57,11 @@ struct BrewStepFlowView: View {
                         .cornerRadius(12)
                         .shadow(radius: 4)
                         .padding()
-                }
-                .sheet(isPresented: $showSheet) {
+                })
+                .sheet(isPresented: self.$showSheet) {
                     BrewStepSelectionSheet { selectedStep in
-                        steps.append(selectedStep)
-                        showSheet = false
+                        self.steps.append(selectedStep)
+                        self.showSheet = false
                     }
                 }
             }
@@ -68,7 +77,7 @@ struct StepDropDelegate: DropDelegate {
     @Binding var draggedItem: String?
 
     func performDrop(info _: DropInfo) -> Bool {
-        draggedItem = nil
+        self.draggedItem = nil
         return true
     }
 
@@ -78,7 +87,10 @@ struct StepDropDelegate: DropDelegate {
               let toIndex = steps.firstIndex(of: item) else { return }
 
         withAnimation {
-            steps.move(fromOffsets: IndexSet(integer: fromIndex), toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex)
+            self.steps.move(
+                fromOffsets: IndexSet(integer: fromIndex),
+                toOffset: toIndex > fromIndex ? toIndex + 1 : toIndex
+            )
         }
     }
 }

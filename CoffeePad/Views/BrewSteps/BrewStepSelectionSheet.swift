@@ -15,30 +15,31 @@ struct BrewStepSelectionSheet: View {
         NavigationView {
             List {
                 if let step = selectedStep {
-                    if selectedSubStep == nil, let details = step.subOptions {
+                    if self.selectedSubStep == nil, !step.subOptions.isEmpty {
+                        let details = step.subOptions
                         Section(header: Text(step.title)) {
                             ForEach(details, id: \.self) { detail in
                                 Button {
-                                    selectedSubStep = "\(step.title): \(detail)"
+                                    self.selectedSubStep = "\(step.title): \(detail)"
                                 } label: {
                                     Text(detail)
                                 }
                             }
                             Button("← 戻る") {
-                                selectedStep = nil
-                                selectedSubStep = nil
+                                self.selectedStep = nil
+                                self.selectedSubStep = nil
                             }
                             .foregroundColor(.blue)
                         }
                     } else {
-                        let finalStep = selectedSubStep ?? step.title
+                        let finalStep = self.selectedSubStep ?? step.title
                         Section(header: Text("詳細設定")) {
                             if step.needsWeightInput {
-                                TextField("量 (g)", text: $inputWeight)
+                                TextField("量 (g)", text: self.$inputWeight)
                                     .keyboardType(.decimalPad)
                             }
                             if step.needsTimeInput {
-                                TextField("時間 (秒)", text: $inputTime)
+                                TextField("時間 (秒)", text: self.$inputTime)
                                     .keyboardType(.numberPad)
                             }
                             Button("追加") {
@@ -49,16 +50,16 @@ struct BrewStepSelectionSheet: View {
                                 if step.needsTimeInput, let t = Int(inputTime), t > 0 {
                                     result += " 時間:\(t)s"
                                 }
-                                onSelect(result)
-                                selectedStep = nil
-                                selectedSubStep = nil
-                                inputWeight = ""
-                                inputTime = ""
+                                self.onSelect(result)
+                                self.selectedStep = nil
+                                self.selectedSubStep = nil
+                                self.inputWeight = ""
+                                self.inputTime = ""
                             }
                             Button("← 戻る") {
-                                selectedSubStep = nil
-                                inputWeight = ""
-                                inputTime = ""
+                                self.selectedSubStep = nil
+                                self.inputWeight = ""
+                                self.inputTime = ""
                             }
                             .foregroundColor(.blue)
                         }
@@ -66,18 +67,18 @@ struct BrewStepSelectionSheet: View {
                 } else {
                     ForEach(stepDefinitions, id: \.title) { step in
                         Button {
-                            if let _ = step.subOptions {
-                                selectedStep = step
+                            if !step.subOptions.isEmpty {
+                                self.selectedStep = step
                             } else if !step.needsWeightInput, !step.needsTimeInput {
-                                onSelect(step.title)
+                                self.onSelect(step.title)
                             } else {
-                                selectedStep = step
+                                self.selectedStep = step
                             }
                         } label: {
                             HStack {
                                 Text(step.title)
                                 Spacer()
-                                if step.subOptions != nil {
+                                if !step.subOptions.isEmpty {
                                     Image(systemName: "chevron.right")
                                 }
                             }

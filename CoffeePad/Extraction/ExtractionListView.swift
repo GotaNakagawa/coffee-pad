@@ -6,19 +6,64 @@ struct ExtractionListView: View {
     @Environment(\.dismiss) private var dismiss
 
     let methods: [ExtractionMethod] = [
-        .init(id: 1, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
-        .init(id: 2, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
-        .init(id: 3, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日"),
-        .init(id: 4, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
-        .init(id: 5, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "4月18日 金曜日"),
-        .init(id: 6, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日"),
+        .init(
+            id: 1,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "4月18日 金曜日"
+        ),
+        .init(
+            id: 2,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "4月18日 金曜日"
+        ),
+        .init(
+            id: 3,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "2月18日 金曜日"
+        ),
+        .init(
+            id: 4,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "4月18日 金曜日"
+        ),
+        .init(
+            id: 5,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "4月18日 金曜日"
+        ),
+        .init(id: 6, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日")
     ]
 
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
         Color("DarkBrown"),
-        Color("DarkBrown"),
+        Color("DarkBrown")
     ]
 
     var body: some View {
@@ -32,8 +77,8 @@ struct ExtractionListView: View {
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        ForEach(Array(methods.enumerated()), id: \.1.id) { index, method in
-                            let color = colors[index % colors.count]
+                        ForEach(Array(self.methods.enumerated()), id: \.1.id) { index, method in
+                            let color = self.colors[index % self.colors.count]
                             ExtractionMethodRow(method: method, color: color)
                         }
                     }
@@ -95,9 +140,9 @@ struct ExtractionListHeader: View {
                 .frame(width: 12, height: 20)
                 .padding(.leading, 6)
                 .onTapGesture {
-                    dismiss()
+                    self.dismiss()
                 },
-            alignment: .leading,
+            alignment: .leading
         )
         .padding(.top, 16)
     }
@@ -110,15 +155,15 @@ struct ExtractionMethodRow: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 20)
-                .fill(color)
+                .fill(self.color)
                 .shadow(radius: 4)
 
             VStack(spacing: 0) {
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(method.title)
+                    Text(self.method.title)
                         .font(.headline)
 
-                    Text(method.comment)
+                    Text(self.method.comment)
                         .font(.caption)
                         .foregroundColor(.gray)
 
@@ -127,28 +172,28 @@ struct ExtractionMethodRow: View {
                             Image("coffeeCupIcon")
                                 .resizable()
                                 .frame(width: 16, height: 16)
-                            Text("\(method.amount)ml")
+                            Text("\(self.method.amount)ml")
                         }
 
                         HStack(spacing: 4) {
                             Image("groundCoffeeIcon")
                                 .resizable()
                                 .frame(width: 16, height: 16)
-                            Text(method.grind)
+                            Text(self.method.grind)
                         }
 
                         HStack(spacing: 4) {
                             Image("thermometerIcon")
                                 .resizable()
                                 .frame(width: 16, height: 16)
-                            Text("\(method.temp)℃")
+                            Text("\(self.method.temp)℃")
                         }
 
                         HStack(spacing: 4) {
                             Image("scaleIcon")
                                 .resizable()
                                 .frame(width: 16, height: 16)
-                            Text("\(method.weight)g")
+                            Text("\(self.method.weight)g")
                         }
                     }
                     .font(.caption)
@@ -163,7 +208,7 @@ struct ExtractionMethodRow: View {
                 .padding(.bottom, 8)
 
                 HStack {
-                    Text(method.date)
+                    Text(self.method.date)
                         .font(.footnote)
                         .bold()
                         .foregroundColor(.white)

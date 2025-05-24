@@ -10,24 +10,24 @@ struct StepPickerView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(title)
+            Text(self.title)
                 .font(.title)
                 .bold()
 
-            Text(description)
+            Text(self.description)
                 .font(.body)
                 .foregroundColor(.gray)
 
             VStack(spacing: 12) {
-                ForEach(options, id: \.self) { option in
+                ForEach(self.options, id: \.self) { option in
                     Button(action: {
-                        selection = option
-                    }) {
+                        self.selection = option
+                    }, label: {
                         HStack {
                             Text(option)
                                 .foregroundColor(.primary)
                             Spacer()
-                            if selection == option {
+                            if self.selection == option {
                                 Image(systemName: "checkmark")
                                     .foregroundColor(.primary)
                             }
@@ -35,9 +35,12 @@ struct StepPickerView: View {
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(selection == option ? Color("DarkBrown") : Color.gray.opacity(0.5), lineWidth: 3),
+                                .stroke(
+                                    self.selection == option ? Color("DarkBrown") : Color.gray.opacity(0.5),
+                                    lineWidth: 3
+                                )
                         )
-                    }
+                    })
                 }
             }
         }

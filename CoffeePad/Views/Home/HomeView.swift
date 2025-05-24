@@ -22,14 +22,14 @@ struct HomeView: View {
                             .renderingMode(.original)
                             .frame(width: 18, height: 14)
                             .padding(.leading, 16),
-                        alignment: .leading,
+                        alignment: .leading
                     )
                     .padding(.top, 16)
 
-                    TabView(selection: $selectedPage) {
-                        ForEach(carouselImages.indices, id: \.self) { index in
+                    TabView(selection: self.$selectedPage) {
+                        ForEach(self.carouselImages.indices, id: \.self) { index in
                             ZStack(alignment: .bottomLeading) {
-                                Image(carouselImages[index])
+                                Image(self.carouselImages[index])
                                     .resizable()
                                     .aspectRatio(1, contentMode: .fill)
                                     .cornerRadius(20)
@@ -47,17 +47,19 @@ struct HomeView: View {
                                 .padding(.leading, 20)
                                 .padding(.bottom, 16)
                             }
-                            .frame(width: UIScreen.main.bounds.width - 40,
-                                   height: UIScreen.main.bounds.width - 40)
+                            .frame(
+                                width: UIScreen.main.bounds.width - 40,
+                                height: UIScreen.main.bounds.width - 40
+                            )
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                     .frame(height: UIScreen.main.bounds.width - 40)
 
                     HStack(spacing: 6) {
-                        ForEach(carouselImages.indices, id: \.self) { index in
+                        ForEach(self.carouselImages.indices, id: \.self) { index in
                             Circle()
-                                .fill(index == selectedPage ? Color.black : Color.gray.opacity(0.4))
+                                .fill(index == self.selectedPage ? Color.black : Color.gray.opacity(0.4))
                                 .frame(width: 8, height: 8)
                         }
                     }

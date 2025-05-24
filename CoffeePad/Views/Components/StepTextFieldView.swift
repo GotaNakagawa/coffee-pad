@@ -13,24 +13,24 @@ struct StepTextFieldView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(title)
+            Text(self.title)
                 .font(.title)
                 .bold()
 
-            Text(description)
+            Text(self.description)
                 .font(.body)
                 .foregroundColor(.gray)
 
             VStack(spacing: 4) {
                 VStack {
-                    TextField(placeholder, text: $text)
-                        .keyboardType(keyboardType)
+                    TextField(self.placeholder, text: self.$text)
+                        .keyboardType(self.keyboardType)
                         .padding(.vertical, 8)
-                        .focused($isFocused)
+                        .focused(self.$isFocused)
                 }
                 .contentShape(Rectangle())
                 .onTapGesture {
-                    isFocused = true
+                    self.isFocused = true
                 }
 
                 Rectangle()
