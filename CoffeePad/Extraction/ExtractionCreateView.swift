@@ -18,17 +18,17 @@ struct ExtractionCreateView: View {
     var canProceedToNextStep: Bool {
         switch currentStep {
         case 0:
-            return !methodName.trimmingCharacters(in: .whitespaces).isEmpty
+            !methodName.trimmingCharacters(in: .whitespaces).isEmpty
         case 1:
-            return !grindSize.isEmpty
+            !grindSize.isEmpty
         case 2:
-            return Int(coffeeAmount) != nil
+            Int(coffeeAmount) != nil
         case 3:
-            return Int(waterTemp) != nil
+            Int(waterTemp) != nil
         case 4:
-            return !brewSteps.isEmpty
+            !brewSteps.isEmpty
         default:
-            return true
+            true
         }
     }
 
@@ -61,14 +61,14 @@ struct ExtractionCreateView: View {
                         title: "抽出メソッド名は",
                         description: "オリジナルの名前をつけましょう",
                         text: $methodName,
-                        placeholder: "例: マイルドドリップ"
+                        placeholder: "例: マイルドドリップ",
                     )
                 case 1:
                     StepPickerView(
                         title: "豆のひき目",
                         description: "使用するコーヒー豆の挽き方を選んでください",
                         selection: $grindSize,
-                        options: grindOptions
+                        options: grindOptions,
                     )
                 case 2:
                     StepTextFieldView(
@@ -76,7 +76,7 @@ struct ExtractionCreateView: View {
                         description: "グラムで入力してください",
                         text: $coffeeAmount,
                         placeholder: "15",
-                        keyboardType: .numberPad
+                        keyboardType: .numberPad,
                     )
                 case 3:
                     StepTextFieldView(
@@ -84,7 +84,7 @@ struct ExtractionCreateView: View {
                         description: "温度を℃で入力してください",
                         text: $waterTemp,
                         placeholder: "90",
-                        keyboardType: .numberPad
+                        keyboardType: .numberPad,
                     )
                 case 4:
                     BrewStepFlowView(steps: $brewSteps)

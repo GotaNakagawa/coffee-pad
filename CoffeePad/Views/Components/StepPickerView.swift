@@ -35,7 +35,7 @@ struct StepPickerView: View {
                         .padding()
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
-                                .stroke(selection == option ? Color("DarkBrown") : Color.gray.opacity(0.5), lineWidth: 3)
+                                .stroke(selection == option ? Color("DarkBrown") : Color.gray.opacity(0.5), lineWidth: 3),
                         )
                     }
                 }

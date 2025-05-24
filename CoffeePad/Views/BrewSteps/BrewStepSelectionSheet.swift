@@ -68,7 +68,7 @@ struct BrewStepSelectionSheet: View {
                         Button {
                             if let _ = step.subOptions {
                                 selectedStep = step
-                            } else if !step.needsWeightInput && !step.needsTimeInput {
+                            } else if !step.needsWeightInput, !step.needsTimeInput {
                                 onSelect(step.title)
                             } else {
                                 selectedStep = step

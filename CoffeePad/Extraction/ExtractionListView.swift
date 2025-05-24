@@ -97,7 +97,7 @@ struct ExtractionListHeader: View {
                 .onTapGesture {
                     dismiss()
                 },
-            alignment: .leading
+            alignment: .leading,
         )
         .padding(.top, 16)
     }

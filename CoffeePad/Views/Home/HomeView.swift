@@ -22,7 +22,7 @@ struct HomeView: View {
                             .renderingMode(.original)
                             .frame(width: 18, height: 14)
                             .padding(.leading, 16),
-                        alignment: .leading
+                        alignment: .leading,
                     )
                     .padding(.top, 16)
 

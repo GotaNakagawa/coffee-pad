@@ -26,7 +26,7 @@ struct BrewStepFlowView: View {
                                 .cornerRadius(8)
                                 .shadow(radius: 2)
                                 .onDrag {
-                                    self.draggedItem = step
+                                    draggedItem = step
                                     return NSItemProvider(object: step as NSString)
                                 }
                                 .onDrop(of: [.text], delegate: StepDropDelegate(item: step, steps: $steps, draggedItem: $draggedItem))
@@ -73,7 +73,7 @@ struct StepDropDelegate: DropDelegate {
     }
 
     func dropEntered(info _: DropInfo) {
-        guard let draggedItem = draggedItem, draggedItem != item,
+        guard let draggedItem, draggedItem != item,
               let fromIndex = steps.firstIndex(of: draggedItem),
               let toIndex = steps.firstIndex(of: item) else { return }
 
