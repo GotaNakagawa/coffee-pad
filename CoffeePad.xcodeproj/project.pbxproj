@@ -124,11 +124,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B6BC5DC2DD03C4000CC5808 /* Build configuration list for PBXNativeTarget "CoffeePad" */;
 			buildPhases = (
+				8BB369612DE1CA9C00DB6FDD /* ShellScript */,
 				8BB368E12DE19EDA00DB6FDD /* Run Script */,
 				8B6BC5B52DD03C3E00CC5808 /* Sources */,
 				8B6BC5B62DD03C3E00CC5808 /* Frameworks */,
 				8B6BC5B72DD03C3E00CC5808 /* Resources */,
-				8BB369612DE1CA9C00DB6FDD /* ShellScript */,
 			);
 			buildRules = (
 			);
