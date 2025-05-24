@@ -46,7 +46,7 @@ https://qiita.com/y-hirakaw/items/1fba72344912d1f3912c
    https://github.com/nicklockwood/SwiftFormat
    ```
 
-3. `Build Phases` に Run Script を追加し、以下を記述：
+3. `Build Phases` に `Run Script` を追加し、以下を記述：
 
    ```bash
    if [[ -e "${BUILD_ROOT}/../../SourcePackages/checkouts/SwiftFormat/CommandLineTool/swiftformat" ]]; then
@@ -57,4 +57,4 @@ https://qiita.com/y-hirakaw/items/1fba72344912d1f3912c
    ```
 
 この設定により、ビルド時にSwiftFormatが初期設定で自動実行され、コードが整形されます。
-また、Xcodeの `CoffeePad`フォルダを右クリック > SwiftFormatPlugin から手動整形も可能になります。
+また、Xcodeの `CoffeePad`フォルダを右クリック > `SwiftFormatPlugin` から手動整形も可能になります。
