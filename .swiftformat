@@ -1,0 +1,11 @@
+--indent 4
+--maxwidth 120
+--commas inline
+--self insert
+--stripunusedargs closure-only
+--header ignore
+--wraparguments before-first
+--wrapcollections preserve
+--wrapconditions after-first
+--wrapparameters preserve
+--disable trailingCommas,wrapMultilineStatementBraces

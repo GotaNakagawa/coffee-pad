@@ -1,15 +1,14 @@
 disabled_rules:
-  # 以下は無効化されているルールの例（必要に応じてコメント解除してください）
+  - attributes
+  - trailing_comma
   - trailing_whitespace
   - force_cast
   - redundant_optional_initialization
-  - line_length
   - function_body_length
   - closure_parameter_position
 
 opt_in_rules:
   - array_init
-  - attributes
   - closure_body_length
   - closure_end_indentation
   - closure_spacing
