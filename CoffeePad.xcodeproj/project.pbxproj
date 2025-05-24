@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		8B506FA72DD094E0008F20BA /* Inject in Frameworks */ = {isa = PBXBuildFile; productRef = 8B506FA62DD094E0008F20BA /* Inject */; };
+		8BB369102DE1A6D100DB6FDD /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 8BB3690F2DE1A6D100DB6FDD /* README.md */; };
+		8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +33,8 @@
 		8B6BC5B92DD03C3E00CC5808 /* CoffeePad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeePad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6BC5C82DD03C4000CC5808 /* CoffeePadTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeePadTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8B6BC5D22DD03C4000CC5808 /* CoffeePadUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CoffeePadUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		8BB3690F2DE1A6D100DB6FDD /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -92,6 +96,8 @@
 				8B6BC5D52DD03C4000CC5808 /* CoffeePadUITests */,
 				8B506FA52DD094E0008F20BA /* Frameworks */,
 				8B6BC5BA2DD03C3E00CC5808 /* Products */,
+				8BB3690F2DE1A6D100DB6FDD /* README.md */,
+				8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */,
 			);
 			sourceTree = "<group>";
 		};
@@ -112,6 +118,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 8B6BC5DC2DD03C4000CC5808 /* Build configuration list for PBXNativeTarget "CoffeePad" */;
 			buildPhases = (
+				8BB368E12DE19EDA00DB6FDD /* Run Script */,
 				8B6BC5B52DD03C3E00CC5808 /* Sources */,
 				8B6BC5B62DD03C3E00CC5808 /* Frameworks */,
 				8B6BC5B72DD03C3E00CC5808 /* Resources */,
@@ -229,6 +236,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */,
+				8BB369102DE1A6D100DB6FDD /* README.md in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +256,28 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		8BB368E12DE19EDA00DB6FDD /* Run Script */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Script";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "export PATH=\"/opt/homebrew/bin:/usr/local/bin:$PATH\"\n\nif which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8B6BC5B52DD03C3E00CC5808 /* Sources */ = {
@@ -415,6 +446,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				EMIT_FRONTEND_COMMAND_LINES = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -447,6 +479,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				EMIT_FRONTEND_COMMAND_LINES = YES;
 				ENABLE_PREVIEWS = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
