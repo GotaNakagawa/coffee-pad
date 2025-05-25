@@ -1,7 +1,7 @@
 import Inject
 import SwiftUI
 
-struct ExtractionCreateStepTextField: View {
+struct CreateBrewMethodStepTextField: View {
     @ObserveInjection var inject
     let title: String
     let description: String

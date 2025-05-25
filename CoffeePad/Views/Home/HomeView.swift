@@ -95,7 +95,7 @@ private struct HomeCarousel: View {
 private struct HomeMenuGrid: View {
     var body: some View {
         LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 3), spacing: 24) {
-            NavigationLink(destination: ExtractionListView()) {
+            NavigationLink(destination: BrewMethodListView()) {
                 MenuButton(title: "抽出メソッド", imageName: "methodIcon", backgroundColor: Color("DeepGreen"))
             }
             MenuButton(title: "テイスティング", imageName: "tastingIcon", backgroundColor: Color("LightBeige"))

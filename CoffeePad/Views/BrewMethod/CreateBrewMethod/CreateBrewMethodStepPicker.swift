@@ -1,7 +1,7 @@
 import Inject
 import SwiftUI
 
-struct ExtractionCreateStepPicker: View {
+struct CreateBrewMethodStepPicker: View {
     @ObserveInjection var inject
     let title: String
     let description: String

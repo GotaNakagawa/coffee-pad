@@ -1,7 +1,7 @@
 import Inject
 import SwiftUI
 
-struct ExtractionCreateStepFlow: View {
+struct CreateBrewMethodStepFlow: View {
     @ObserveInjection var inject
     @Binding var steps: [String]
     @State private var showSheet = false
@@ -104,7 +104,7 @@ private struct ExtractionCreateStepAddButton: View {
                     .padding()
             })
             .sheet(isPresented: self.$showSheet) {
-                ExtractionCreateStepSelectionSheet { selectedStep in
+                CreateBrewMethodStepSelectionSheet { selectedStep in
                     self.steps.append(selectedStep)
                     self.showSheet = false
                 }

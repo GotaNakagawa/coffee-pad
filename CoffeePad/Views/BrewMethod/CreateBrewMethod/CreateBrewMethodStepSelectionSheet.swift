@@ -2,7 +2,7 @@ import Foundation
 import Inject
 import SwiftUI
 
-struct ExtractionCreateStepSelectionSheet: View {
+struct CreateBrewMethodStepSelectionSheet: View {
     @ObserveInjection var inject
     let onSelect: (String) -> Void
 

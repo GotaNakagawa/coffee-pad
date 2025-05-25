@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExtractionStats: View {
+struct BrewMethodListStats: View {
     var body: some View {
         HStack(spacing: 16) {
             VStack {

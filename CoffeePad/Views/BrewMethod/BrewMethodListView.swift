@@ -1,11 +1,11 @@
 import Inject
 import SwiftUI
 
-struct ExtractionListView: View {
+struct BrewMethodListView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
 
-    let methods: [ExtractionMethod] = [
+    let methods: [BrewMethod] = [
         .init(
             id: 1,
             title: "メソッド名",
@@ -56,7 +56,16 @@ struct ExtractionListView: View {
             weight: 225,
             date: "4月18日 金曜日"
         ),
-        .init(id: 6, title: "メソッド名", comment: "備考", amount: 200, grind: "中挽き", temp: 95, weight: 225, date: "2月18日 金曜日")
+        .init(
+            id: 6,
+            title: "メソッド名",
+            comment: "備考",
+            amount: 200,
+            grind: "中挽き",
+            temp: 95,
+            weight: 225,
+            date: "2月18日 金曜日"
+        ),
     ]
 
     let colors: [Color] = [
@@ -69,24 +78,24 @@ struct ExtractionListView: View {
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             VStack(alignment: .leading, spacing: 16) {
-                ExtractionListHeader()
+                BrewMethodListHeader()
 
                 Spacer()
 
-                ExtractionStats()
+                BrewMethodListStats()
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
                         ForEach(Array(self.methods.enumerated()), id: \.1.id) { index, method in
                             let color = self.colors[index % self.colors.count]
-                            ExtractionMethodRow(method: method, color: color)
+                            BrewMethodRow(method: method, color: color)
                         }
                     }
                 }
             }
             .padding()
 
-            NavigationLink(destination: ExtractionCreateView()) {
+            NavigationLink(destination: CreateBrewMethodView()) {
                 Image(systemName: "plus")
                     .font(.title)
                     .foregroundColor(.black)

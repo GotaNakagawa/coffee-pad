@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct ExtractionMethodRow: View {
-    let method: ExtractionMethod
+struct BrewMethodRow: View {
+    let method: BrewMethod
     let color: Color
 
     var body: some View {
@@ -11,7 +11,7 @@ struct ExtractionMethodRow: View {
                 .shadow(radius: 4)
 
             VStack(spacing: 0) {
-                ExtractionMethodDetailsView(method: self.method)
+                BrewMethodDetails(method: self.method)
 
                 HStack {
                     Text(self.method.date)
@@ -33,8 +33,8 @@ struct ExtractionMethodRow: View {
     }
 }
 
-private struct ExtractionMethodDetailsView: View {
-    let method: ExtractionMethod
+private struct BrewMethodDetails: View {
+    let method: BrewMethod
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

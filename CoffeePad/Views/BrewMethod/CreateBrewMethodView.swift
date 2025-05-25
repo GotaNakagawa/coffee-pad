@@ -1,7 +1,7 @@
 import Inject
 import SwiftUI
 
-struct ExtractionCreateView: View {
+struct CreateBrewMethodView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
     @State private var currentStep = 0
@@ -54,7 +54,7 @@ struct ExtractionCreateView: View {
                 Spacer()
             }
 
-            ExtractionCreateStepContent(
+            CreateBrewMethodStepContent(
                 currentStep: self.currentStep,
                 methodName: self.$methodName,
                 grindSize: self.$grindSize,

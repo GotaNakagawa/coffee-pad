@@ -1,4 +1,4 @@
-struct ExtractionMethod: Identifiable {
+struct BrewMethod: Identifiable {
     let id: Int
     let title: String
     let comment: String

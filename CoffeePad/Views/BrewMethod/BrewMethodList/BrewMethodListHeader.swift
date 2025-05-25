@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExtractionListHeader: View {
+struct BrewMethodListHeader: View {
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
