@@ -13,18 +13,18 @@ struct CreateBrewMethodStepFlow: View {
                 .font(.title)
                 .bold()
 
-            ExtractionCreateStepList(steps: self.$steps, draggedItem: self.$draggedItem)
+            CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
 
             Spacer()
 
-            ExtractionCreateStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
+            CreateBrewMethodStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
         }
         .padding()
         .enableInjection()
     }
 }
 
-private struct ExtractionCreateStepList: View {
+private struct CreateBrewMethodStepList: View {
     @Binding var steps: [String]
     @Binding var draggedItem: String?
 
@@ -84,7 +84,7 @@ struct StepDropDelegate: DropDelegate {
     }
 }
 
-private struct ExtractionCreateStepAddButton: View {
+private struct CreateBrewMethodStepAddButton: View {
     @Binding var steps: [String]
     @Binding var showSheet: Bool
 
