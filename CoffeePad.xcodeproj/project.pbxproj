@@ -12,8 +12,8 @@
 		8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */; };
 		8BB369652DE1CE1800DB6FDD /* .swift-version in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369642DE1CE1800DB6FDD /* .swift-version */; };
 		8BB369672DE1D41700DB6FDD /* .swiftformat in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369662DE1D41700DB6FDD /* .swiftformat */; };
-		8BB369DD2DE6011F00DB6FDD /* claude_pull_request_template.md in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369D82DE6011F00DB6FDD /* claude_pull_request_template.md */; };
 		8BB369DE2DE6011F00DB6FDD /* claude-review.yml in Resources */ = {isa = PBXBuildFile; fileRef = 8BB369DA2DE6011F00DB6FDD /* claude-review.yml */; };
+		8BB36A422DE602ED00DB6FDD /* PULL_REQUEST_TEMPLATE 2.md in Resources */ = {isa = PBXBuildFile; fileRef = 8BB36A412DE602ED00DB6FDD /* PULL_REQUEST_TEMPLATE 2.md */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,8 +41,8 @@
 		8BB369112DE1A76E00DB6FDD /* .swiftlint.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = "<group>"; };
 		8BB369642DE1CE1800DB6FDD /* .swift-version */ = {isa = PBXFileReference; lastKnownFileType = text; path = ".swift-version"; sourceTree = "<group>"; };
 		8BB369662DE1D41700DB6FDD /* .swiftformat */ = {isa = PBXFileReference; lastKnownFileType = text; path = .swiftformat; sourceTree = "<group>"; };
-		8BB369D82DE6011F00DB6FDD /* claude_pull_request_template.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = claude_pull_request_template.md; sourceTree = "<group>"; };
 		8BB369DA2DE6011F00DB6FDD /* claude-review.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = "claude-review.yml"; sourceTree = "<group>"; };
+		8BB36A412DE602ED00DB6FDD /* PULL_REQUEST_TEMPLATE 2.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "PULL_REQUEST_TEMPLATE 2.md"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -122,14 +122,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8BB369D92DE6011F00DB6FDD /* PULL_REQUEST_TEMPLATE */ = {
-			isa = PBXGroup;
-			children = (
-				8BB369D82DE6011F00DB6FDD /* claude_pull_request_template.md */,
-			);
-			path = PULL_REQUEST_TEMPLATE;
-			sourceTree = "<group>";
-		};
 		8BB369DB2DE6011F00DB6FDD /* workflows */ = {
 			isa = PBXGroup;
 			children = (
@@ -141,8 +133,8 @@
 		8BB369DC2DE6011F00DB6FDD /* .github */ = {
 			isa = PBXGroup;
 			children = (
-				8BB369D92DE6011F00DB6FDD /* PULL_REQUEST_TEMPLATE */,
 				8BB369DB2DE6011F00DB6FDD /* workflows */,
+				8BB36A412DE602ED00DB6FDD /* PULL_REQUEST_TEMPLATE 2.md */,
 			);
 			path = .github;
 			sourceTree = "<group>";
@@ -274,9 +266,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8BB36A422DE602ED00DB6FDD /* PULL_REQUEST_TEMPLATE 2.md in Resources */,
 				8BB369672DE1D41700DB6FDD /* .swiftformat in Resources */,
 				8BB369652DE1CE1800DB6FDD /* .swift-version in Resources */,
-				8BB369DD2DE6011F00DB6FDD /* claude_pull_request_template.md in Resources */,
 				8BB369DE2DE6011F00DB6FDD /* claude-review.yml in Resources */,
 				8BB369122DE1A76E00DB6FDD /* .swiftlint.yml in Resources */,
 				8BB369102DE1A6D100DB6FDD /* README.md in Resources */,
