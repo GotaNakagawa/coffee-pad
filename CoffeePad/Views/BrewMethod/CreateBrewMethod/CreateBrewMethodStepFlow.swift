@@ -36,23 +36,36 @@ private struct CreateBrewMethodStepList: View {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
                     ForEach(self.steps, id: \.self) { step in
-                        Text("・\(step)")
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .shadow(radius: 2)
-                            .onDrag {
-                                self.draggedItem = step
-                                return NSItemProvider(object: step as NSString)
-                            }
-                            .onDrop(
-                                of: [.text],
-                                delegate: StepDropDelegate(
-                                    item: step,
-                                    steps: self.$steps,
-                                    draggedItem: self.$draggedItem
-                                )
+                        HStack(spacing: 12) {
+                            Image(systemName: "drop.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.green)
+
+                            Text(step)
+                                .font(.body)
+                                .foregroundColor(.black)
+
+                            Spacer()
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(radius: 2)
+                        .onDrag {
+                            self.draggedItem = step
+                            return NSItemProvider(object: step as NSString)
+                        }
+                        .onDrop(
+                            of: [.text],
+                            delegate: StepDropDelegate(
+                                item: step,
+                                steps: self.$steps,
+                                draggedItem: self.$draggedItem
                             )
+                        )
                     }
                 }
             }
