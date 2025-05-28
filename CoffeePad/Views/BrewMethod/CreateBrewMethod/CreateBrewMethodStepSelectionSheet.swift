@@ -3,6 +3,7 @@ import Inject
 import SwiftUI
 
 struct CreateBrewMethodStepSelectionSheet: View {
+    @Environment(\.dismiss) private var dismiss
     @ObserveInjection var inject
     let onSelect: (String) -> Void
 
@@ -12,8 +13,24 @@ struct CreateBrewMethodStepSelectionSheet: View {
     @State private var inputTime: String = ""
 
     var body: some View {
-        NavigationView {
-            List {
+        VStack(spacing: 0) {
+            HStack {
+                Text("手順を選択")
+                    .font(.headline)
+                    .padding()
+                Spacer()
+                Button(action: { self.dismiss() }, label: {
+                    Image(systemName: "xmark")
+                        .font(.title2)
+                        .foregroundColor(.gray)
+                        .padding()
+                })
+            }
+            .padding()
+
+            Divider()
+
+            ScrollView {
                 StepSelectionContent(
                     selectedStep: self.$selectedStep,
                     selectedSubStep: self.$selectedSubStep,
@@ -22,8 +39,9 @@ struct CreateBrewMethodStepSelectionSheet: View {
                     onSelect: self.onSelect
                 )
             }
-            .navigationBarTitleDisplayMode(.inline)
         }
+        .background(Color(.systemGray6))
+        .ignoresSafeArea()
         .enableInjection()
     }
 }
@@ -154,25 +172,26 @@ private struct StepSelectionList: View {
                             self.onStepSelected(step)
                         }
                     } label: {
-                        VStack(spacing: 8) {
-                            Image(systemName: "drop.fill").resizable()
-                                .scaledToFit()
-                                .frame(width: 40, height: 40)
-                                .foregroundColor(.green)
-
+                        HStack(spacing: 12) {
                             Text(step.title)
                                 .font(.body)
                                 .foregroundColor(.primary)
-                                .multilineTextAlignment(.center)
+                            Spacer()
+                            Image(systemName: "drop.fill")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 24, height: 24)
+                                .foregroundColor(.green)
                         }
                         .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color(.systemGray6))
-                        .cornerRadius(12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
             }
             .padding()
         }
+        .background(Color(.systemGray6))
     }
 }

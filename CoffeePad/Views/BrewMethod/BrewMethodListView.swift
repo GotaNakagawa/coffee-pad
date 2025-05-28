@@ -98,7 +98,7 @@ struct BrewMethodListView: View {
             NavigationLink(destination: CreateBrewMethodView()) {
                 Image(systemName: "plus")
                     .font(.title)
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.primary)
                     .frame(width: 56, height: 56)
                     .background(Color.white)
                     .cornerRadius(12)
