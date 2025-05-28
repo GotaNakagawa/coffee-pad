@@ -56,7 +56,7 @@ private struct StepSelectionContent: View {
     var body: some View {
         if let step = selectedStep {
             if self.selectedSubStep == nil, !step.subOptions.isEmpty {
-                StepSubOptionSelection(
+                StepSubOptionSelectionList(
                     step: step,
                     onSelect: { selected in
                         self.selectedSubStep = selected
@@ -92,28 +92,6 @@ private struct StepSelectionContent: View {
             ) { step in
                 self.selectedStep = step
             }
-        }
-    }
-}
-
-private struct StepSubOptionSelection: View {
-    let step: StepDefinition
-    let onSelect: (String) -> Void
-    let onBack: () -> Void
-
-    var body: some View {
-        Section(header: Text(self.step.title)) {
-            ForEach(self.step.subOptions, id: \.self) { detail in
-                Button {
-                    self.onSelect("\(self.step.title): \(detail)")
-                } label: {
-                    Text(detail)
-                }
-            }
-            Button("← 戻る") {
-                self.onBack()
-            }
-            .foregroundColor(.blue)
         }
     }
 }
@@ -160,37 +138,92 @@ private struct StepSelectionList: View {
     let onStepSelected: (StepDefinition) -> Void
 
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
-                ForEach(stepDefinitions, id: \.title) { step in
-                    Button {
-                        if !step.subOptions.isEmpty {
-                            self.onStepSelected(step)
-                        } else if !step.needsWeightInput, !step.needsTimeInput {
-                            self.onSelect(step.title)
-                        } else {
-                            self.onStepSelected(step)
-                        }
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(step.title)
-                                .font(.body)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "drop.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.green)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
+        SelectableCardList(
+            title: nil,
+            items: stepDefinitions.map(\.title),
+            onSelect: { title in
+                if let step = stepDefinitions.first(where: { $0.title == title }) {
+                    if !step.subOptions.isEmpty {
+                        self.onStepSelected(step)
+                    } else if !step.needsWeightInput, !step.needsTimeInput {
+                        self.onSelect(step.title)
+                    } else {
+                        self.onStepSelected(step)
                     }
                 }
+            },
+            backButtonTitle: nil,
+            onBack: nil
+        )
+    }
+}
+
+private struct StepSubOptionSelectionList: View {
+    let step: StepDefinition
+    let onSelect: (String) -> Void
+    let onBack: () -> Void
+
+    var body: some View {
+        SelectableCardList(
+            title: self.step.title,
+            items: self.step.subOptions,
+            onSelect: { detail in
+                self.onSelect("\(self.step.title): \(detail)")
+            },
+            backButtonTitle: "← 戻る",
+            onBack: self.onBack
+        )
+    }
+}
+
+private struct SelectableCardList: View {
+    let title: String?
+    let items: [String]
+    let onSelect: (String) -> Void
+    let backButtonTitle: String?
+    let onBack: (() -> Void)?
+
+    var body: some View {
+        VStack(alignment: .leading) {
+            if let title {
+                Text(title)
+                    .font(.headline)
+                    .padding(.leading)
+                    .padding(.top)
             }
-            .padding()
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
+                    ForEach(self.items, id: \.self) { item in
+                        Button {
+                            self.onSelect(item)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(item)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Image(systemName: "drop.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                    .foregroundColor(.green)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
+                }
+                .padding()
+            }
+            if let backButtonTitle, let onBack {
+                Button(backButtonTitle) {
+                    onBack()
+                }
+                .foregroundColor(.blue)
+                .padding()
+            }
         }
         .background(Color(.systemGray6))
     }
