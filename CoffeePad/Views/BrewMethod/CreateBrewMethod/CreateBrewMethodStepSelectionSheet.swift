@@ -54,66 +54,56 @@ private struct StepSelectionContent: View {
     let onSelect: (String) -> Void
 
     var body: some View {
-        if let step = selectedStep {
-            if self.selectedSubStep == nil, !step.subOptions.isEmpty {
-                StepSubOptionSelection(
-                    step: step,
-                    onSelect: { selected in
-                        self.selectedSubStep = selected
-                    },
-                    onBack: {
-                        self.selectedStep = nil
-                        self.selectedSubStep = nil
+        if self.selectedStep == nil {
+            SelectableCardList(
+                title: nil,
+                items: stepDefinitions.map(\.title),
+                onSelect: { title in
+                    if let step = stepDefinitions.first(where: { $0.title == title }) {
+                        if !step.subOptions.isEmpty {
+                            self.selectedStep = step
+                        } else if !step.needsWeightInput, !step.needsTimeInput {
+                            self.onSelect(step.title)
+                        } else {
+                            self.selectedStep = step
+                        }
                     }
-                )
-            } else {
-                StepDetailInput(
-                    step: step,
-                    selectedSubStep: self.selectedSubStep,
-                    inputWeight: self.$inputWeight,
-                    inputTime: self.$inputTime,
-                    onAdd: { result in
-                        self.onSelect(result)
-                        self.selectedStep = nil
-                        self.selectedSubStep = nil
-                        self.inputWeight = ""
-                        self.inputTime = ""
-                    },
-                    onBack: {
-                        self.selectedSubStep = nil
-                        self.inputWeight = ""
-                        self.inputTime = ""
-                    }
-                )
-            }
-        } else {
-            StepSelectionList(
-                onSelect: self.onSelect
-            ) { step in
-                self.selectedStep = step
-            }
-        }
-    }
-}
-
-private struct StepSubOptionSelection: View {
-    let step: StepDefinition
-    let onSelect: (String) -> Void
-    let onBack: () -> Void
-
-    var body: some View {
-        Section(header: Text(self.step.title)) {
-            ForEach(self.step.subOptions, id: \.self) { detail in
-                Button {
-                    self.onSelect("\(self.step.title): \(detail)")
-                } label: {
-                    Text(detail)
+                },
+                backButtonTitle: nil,
+                onBack: nil
+            )
+        } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
+            SelectableCardList(
+                title: step.title,
+                items: step.subOptions,
+                onSelect: { detail in
+                    self.selectedSubStep = detail
+                },
+                backButtonTitle: "← 戻る",
+                onBack: {
+                    self.selectedStep = nil
+                    self.selectedSubStep = nil
                 }
-            }
-            Button("← 戻る") {
-                self.onBack()
-            }
-            .foregroundColor(.blue)
+            )
+        } else if let step = self.selectedStep {
+            StepDetailInput(
+                step: step,
+                selectedSubStep: self.selectedSubStep,
+                inputWeight: self.$inputWeight,
+                inputTime: self.$inputTime,
+                onAdd: { result in
+                    self.onSelect(result)
+                    self.selectedStep = nil
+                    self.selectedSubStep = nil
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                },
+                onBack: {
+                    self.selectedSubStep = nil
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                }
+            )
         }
     }
 }
@@ -155,42 +145,54 @@ private struct StepDetailInput: View {
     }
 }
 
-private struct StepSelectionList: View {
+private struct SelectableCardList: View {
+    let title: String?
+    let items: [String]
     let onSelect: (String) -> Void
-    let onStepSelected: (StepDefinition) -> Void
+    let backButtonTitle: String?
+    let onBack: (() -> Void)?
 
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
-                ForEach(stepDefinitions, id: \.title) { step in
-                    Button {
-                        if !step.subOptions.isEmpty {
-                            self.onStepSelected(step)
-                        } else if !step.needsWeightInput, !step.needsTimeInput {
-                            self.onSelect(step.title)
-                        } else {
-                            self.onStepSelected(step)
+        VStack(alignment: .leading) {
+            if let title {
+                Text(title)
+                    .font(.headline)
+                    .padding(.leading)
+                    .padding(.top)
+            }
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
+                    ForEach(self.items, id: \.self) { item in
+                        Button {
+                            self.onSelect(item)
+                        } label: {
+                            HStack(spacing: 12) {
+                                Text(item)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
+                                Spacer()
+                                Image(systemName: "drop.fill")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 24, height: 24)
+                                    .foregroundColor(.green)
+                            }
+                            .padding()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
                         }
-                    } label: {
-                        HStack(spacing: 12) {
-                            Text(step.title)
-                                .font(.body)
-                                .foregroundColor(.primary)
-                            Spacer()
-                            Image(systemName: "drop.fill")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 24, height: 24)
-                                .foregroundColor(.green)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 12))
                     }
                 }
+                .padding()
             }
-            .padding()
+            if let backButtonTitle, let onBack {
+                Button(backButtonTitle) {
+                    onBack()
+                }
+                .foregroundColor(.blue)
+                .padding()
+            }
         }
         .background(Color(.systemGray6))
     }
