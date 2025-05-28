@@ -39,7 +39,6 @@ struct CreateBrewMethodStepSelectionSheet: View {
                     onSelect: self.onSelect
                 )
             }
-            .background(Color(.systemGray6))
         }
         .background(Color(.systemGray6))
         .ignoresSafeArea()
