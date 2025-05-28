@@ -45,7 +45,7 @@ private struct CreateBrewMethodStepList: View {
 
                             Text(step)
                                 .font(.body)
-                                .foregroundColor(.black)
+                                .foregroundColor(Color.primary)
 
                             Spacer()
                         }
@@ -109,7 +109,7 @@ private struct CreateBrewMethodStepAddButton: View {
             }, label: {
                 Image(systemName: "plus")
                     .font(.title)
-                    .foregroundColor(.black)
+                    .foregroundColor(Color.primary)
                     .frame(width: 56, height: 56)
                     .background(Color.white)
                     .cornerRadius(12)
