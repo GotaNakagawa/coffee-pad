@@ -55,23 +55,37 @@ private struct StepSelectionContent: View {
 
     var body: some View {
         if self.selectedStep == nil {
-            StepSelectionList(
-                onSelect: self.onSelect
-            ) { step in
-                self.selectedStep = step
-            }
-        } else if let step = selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
-            StepSubOptionSelectionList(
-                step: step,
-                onSelect: { selected in
-                    self.selectedSubStep = selected
+            SelectableCardList(
+                title: nil,
+                items: stepDefinitions.map(\.title),
+                onSelect: { title in
+                    if let step = stepDefinitions.first(where: { $0.title == title }) {
+                        if !step.subOptions.isEmpty {
+                            self.selectedStep = step
+                        } else if !step.needsWeightInput, !step.needsTimeInput {
+                            self.onSelect(step.title)
+                        } else {
+                            self.selectedStep = step
+                        }
+                    }
                 },
+                backButtonTitle: nil,
+                onBack: nil
+            )
+        } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
+            SelectableCardList(
+                title: step.title,
+                items: step.subOptions,
+                onSelect: { detail in
+                    self.selectedSubStep = detail
+                },
+                backButtonTitle: "← 戻る",
                 onBack: {
                     self.selectedStep = nil
                     self.selectedSubStep = nil
                 }
             )
-        } else if let step = selectedStep {
+        } else if let step = self.selectedStep {
             StepDetailInput(
                 step: step,
                 selectedSubStep: self.selectedSubStep,
@@ -128,49 +142,6 @@ private struct StepDetailInput: View {
             }
             .foregroundColor(.blue)
         }
-    }
-}
-
-private struct StepSelectionList: View {
-    let onSelect: (String) -> Void
-    let onStepSelected: (StepDefinition) -> Void
-
-    var body: some View {
-        SelectableCardList(
-            title: nil,
-            items: stepDefinitions.map(\.title),
-            onSelect: { title in
-                if let step = stepDefinitions.first(where: { $0.title == title }) {
-                    if !step.subOptions.isEmpty {
-                        self.onStepSelected(step)
-                    } else if !step.needsWeightInput, !step.needsTimeInput {
-                        self.onSelect(step.title)
-                    } else {
-                        self.onStepSelected(step)
-                    }
-                }
-            },
-            backButtonTitle: nil,
-            onBack: nil
-        )
-    }
-}
-
-private struct StepSubOptionSelectionList: View {
-    let step: StepDefinition
-    let onSelect: (String) -> Void
-    let onBack: () -> Void
-
-    var body: some View {
-        SelectableCardList(
-            title: self.step.title,
-            items: self.step.subOptions,
-            onSelect: { detail in
-                self.onSelect("\(self.step.title): \(detail)")
-            },
-            backButtonTitle: "← 戻る",
-            onBack: self.onBack
-        )
     }
 }
 
