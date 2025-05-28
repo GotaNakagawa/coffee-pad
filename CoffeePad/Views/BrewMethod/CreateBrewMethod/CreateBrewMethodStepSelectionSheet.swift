@@ -54,44 +54,42 @@ private struct StepSelectionContent: View {
     let onSelect: (String) -> Void
 
     var body: some View {
-        if let step = selectedStep {
-            if self.selectedSubStep == nil, !step.subOptions.isEmpty {
-                StepSubOptionSelectionList(
-                    step: step,
-                    onSelect: { selected in
-                        self.selectedSubStep = selected
-                    },
-                    onBack: {
-                        self.selectedStep = nil
-                        self.selectedSubStep = nil
-                    }
-                )
-            } else {
-                StepDetailInput(
-                    step: step,
-                    selectedSubStep: self.selectedSubStep,
-                    inputWeight: self.$inputWeight,
-                    inputTime: self.$inputTime,
-                    onAdd: { result in
-                        self.onSelect(result)
-                        self.selectedStep = nil
-                        self.selectedSubStep = nil
-                        self.inputWeight = ""
-                        self.inputTime = ""
-                    },
-                    onBack: {
-                        self.selectedSubStep = nil
-                        self.inputWeight = ""
-                        self.inputTime = ""
-                    }
-                )
-            }
-        } else {
+        if self.selectedStep == nil {
             StepSelectionList(
                 onSelect: self.onSelect
             ) { step in
                 self.selectedStep = step
             }
+        } else if let step = selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
+            StepSubOptionSelectionList(
+                step: step,
+                onSelect: { selected in
+                    self.selectedSubStep = selected
+                },
+                onBack: {
+                    self.selectedStep = nil
+                    self.selectedSubStep = nil
+                }
+            )
+        } else if let step = selectedStep {
+            StepDetailInput(
+                step: step,
+                selectedSubStep: self.selectedSubStep,
+                inputWeight: self.$inputWeight,
+                inputTime: self.$inputTime,
+                onAdd: { result in
+                    self.onSelect(result)
+                    self.selectedStep = nil
+                    self.selectedSubStep = nil
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                },
+                onBack: {
+                    self.selectedSubStep = nil
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                }
+            )
         }
     }
 }
