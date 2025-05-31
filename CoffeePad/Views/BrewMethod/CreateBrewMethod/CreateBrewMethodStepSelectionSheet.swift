@@ -12,11 +12,23 @@ struct CreateBrewMethodStepSelectionSheet: View {
     @State private var inputWeight: String = ""
     @State private var inputTime: String = ""
 
+    var headerTitle: String {
+        if self.selectedStep == nil {
+            "抽出手順を選択してください"
+        } else if let step = selectedStep, selectedSubStep == nil, !step.subOptions.isEmpty {
+            step.subOptionPrompt ?? "詳細を選択してください"
+        } else if let step = selectedStep, step.needsTimeInput || step.needsWeightInput {
+            step.inputPrompt ?? "情報を入力してください"
+        } else {
+            "抽出手順"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
                 ZStack {
-                    Text("抽出手順を選択してください")
+                    Text(self.headerTitle)
                         .font(.headline)
                     HStack {
                         if self.selectedStep == nil {
@@ -77,42 +89,37 @@ private struct StepSelectionContent: View {
     var body: some View {
         if self.selectedStep == nil {
             SelectableCardList(
-                title: nil,
-                items: stepDefinitions.map(\.title),
-                onSelect: { title in
-                    if let step = stepDefinitions.first(where: { $0.title == title }) {
-                        if !step.subOptions.isEmpty {
-                            self.selectedStep = step
-                        } else if !step.needsWeightInput, !step.needsTimeInput {
-                            self.onSelect(step.title)
-                        } else {
-                            self.selectedStep = step
-                        }
+                items: stepDefinitions.map(\.title)
+            ) { title in
+                if let step = stepDefinitions.first(where: { $0.title == title }) {
+                    if !step.subOptions.isEmpty {
+                        self.selectedStep = step
+                    } else if !step.needsWeightInput, !step.needsTimeInput {
+                        self.onSelect(step.title)
+                    } else {
+                        self.selectedStep = step
                     }
                 }
-            )
+            }
         } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
             SelectableCardList(
-                title: step.title,
-                items: step.subOptions,
-                onSelect: { detail in
-                    self.selectedSubStep = detail
-                }
-            )
+                items: step.subOptions
+            ) { detail in
+                self.selectedSubStep = detail
+            }
         } else if let step = self.selectedStep {
             StepDetailInput(
                 step: step,
                 selectedSubStep: self.selectedSubStep,
                 inputWeight: self.$inputWeight,
-                inputTime: self.$inputTime,
-                onAdd: { result in
-                    self.onSelect(result)
-                    self.selectedStep = nil
-                    self.selectedSubStep = nil
-                    self.inputWeight = ""
-                    self.inputTime = ""
-                }
-            )
+                inputTime: self.$inputTime
+            ) { result in
+                self.onSelect(result)
+                self.selectedStep = nil
+                self.selectedSubStep = nil
+                self.inputWeight = ""
+                self.inputTime = ""
+            }
         }
     }
 }
@@ -150,18 +157,11 @@ private struct StepDetailInput: View {
 }
 
 private struct SelectableCardList: View {
-    let title: String?
     let items: [String]
     let onSelect: (String) -> Void
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let title {
-                Text(title)
-                    .font(.headline)
-                    .padding(.leading)
-                    .padding(.top)
-            }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
                     ForEach(self.items, id: \.self) { item in
