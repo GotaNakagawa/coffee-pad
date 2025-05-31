@@ -15,18 +15,39 @@ struct CreateBrewMethodStepSelectionSheet: View {
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("手順を選択")
-                    .font(.headline)
-                    .padding()
-                Spacer()
-                Button(action: { self.dismiss() }, label: {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                        .padding()
-                })
+                ZStack {
+                    Text("抽出手順を選択してください")
+                        .font(.headline)
+                    HStack {
+                        if self.selectedStep == nil {
+                            Button(action: { self.dismiss() }, label: {
+                                Image(systemName: "xmark")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            })
+                        } else {
+                            Button(action: {
+                                if self.selectedSubStep != nil {
+                                    self.selectedSubStep = nil
+                                    self.inputWeight = ""
+                                    self.inputTime = ""
+                                } else {
+                                    self.selectedStep = nil
+                                    self.selectedSubStep = nil
+                                }
+                            }, label: {
+                                Image(systemName: "chevron.backward")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            })
+                        }
+                        Spacer()
+                    }
+                }
+                .padding()
             }
-            .padding()
 
             Divider()
 
@@ -68,9 +89,7 @@ private struct StepSelectionContent: View {
                             self.selectedStep = step
                         }
                     }
-                },
-                backButtonTitle: nil,
-                onBack: nil
+                }
             )
         } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
             SelectableCardList(
@@ -78,11 +97,6 @@ private struct StepSelectionContent: View {
                 items: step.subOptions,
                 onSelect: { detail in
                     self.selectedSubStep = detail
-                },
-                backButtonTitle: "← 戻る",
-                onBack: {
-                    self.selectedStep = nil
-                    self.selectedSubStep = nil
                 }
             )
         } else if let step = self.selectedStep {
@@ -94,11 +108,6 @@ private struct StepSelectionContent: View {
                 onAdd: { result in
                     self.onSelect(result)
                     self.selectedStep = nil
-                    self.selectedSubStep = nil
-                    self.inputWeight = ""
-                    self.inputTime = ""
-                },
-                onBack: {
                     self.selectedSubStep = nil
                     self.inputWeight = ""
                     self.inputTime = ""
@@ -114,7 +123,6 @@ private struct StepDetailInput: View {
     @Binding var inputWeight: String
     @Binding var inputTime: String
     let onAdd: (String) -> Void
-    let onBack: () -> Void
 
     var body: some View {
         let finalStep = self.selectedSubStep ?? self.step.title
@@ -137,10 +145,6 @@ private struct StepDetailInput: View {
                 }
                 self.onAdd(result)
             }
-            Button("← 戻る") {
-                self.onBack()
-            }
-            .foregroundColor(.blue)
         }
     }
 }
@@ -149,8 +153,6 @@ private struct SelectableCardList: View {
     let title: String?
     let items: [String]
     let onSelect: (String) -> Void
-    let backButtonTitle: String?
-    let onBack: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading) {
@@ -184,13 +186,6 @@ private struct SelectableCardList: View {
                         }
                     }
                 }
-                .padding()
-            }
-            if let backButtonTitle, let onBack {
-                Button(backButtonTitle) {
-                    onBack()
-                }
-                .foregroundColor(.blue)
                 .padding()
             }
         }
