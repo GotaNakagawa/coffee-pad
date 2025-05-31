@@ -157,48 +157,62 @@ private struct StepDetailInput: View {
     @Binding var inputTime: String
     let onAdd: (String) -> Void
 
+    private var canAddStep: Bool {
+        var ok = true
+        if self.step.needsWeightInput {
+            ok = ok && (Int(self.inputWeight) ?? 0) > 0
+        }
+        if self.step.needsTimeInput {
+            ok = ok && (Int(self.inputTime) ?? 0) > 0
+        }
+        return ok
+    }
+
     var body: some View {
         let finalStep = self.selectedSubStep ?? self.step.title
-        Section(header: Text("詳細設定")) {
-            switch self.step.type {
-            case .pourWater:
-                TextField("量 (g)", text: self.$inputWeight)
+        VStack(alignment: .leading, spacing: 16) {
+            if self.step.needsWeightInput {
+                Text("量 (g)")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                TextField("例: 200", text: self.$inputWeight)
                     .keyboardType(.decimalPad)
-                TextField("時間 (秒)", text: self.$inputTime)
-                    .keyboardType(.numberPad)
-            case .stir, .wait:
-                TextField("時間 (秒)", text: self.$inputTime)
-                    .keyboardType(.numberPad)
-            case .addIce:
-                TextField("量 (g)", text: self.$inputWeight)
-                    .keyboardType(.decimalPad)
-            case .removeDripper, .emptyServer:
-                EmptyView()
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
-            Button("追加") {
-                var result = finalStep
-                switch self.step.type {
-                case .pourWater:
-                    if let w = Double(inputWeight), w > 0 {
-                        result += " 量:\(w)g"
+            if self.step.needsTimeInput {
+                Text("時間 (秒)")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                TextField("例: 30", text: self.$inputTime)
+                    .keyboardType(.numberPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+            }
+            Button(
+                action: {
+                    var result = finalStep
+                    if self.step.needsWeightInput, let w = Int(inputWeight), w > 0 {
+                        result += "\(w)g"
                     }
-                    if let t = Int(inputTime), t > 0 {
-                        result += " 時間:\(t)s"
+                    if self.step.needsTimeInput, let t = Int(inputTime), t > 0 {
+                        result += "\(t)s"
                     }
-                case .stir, .wait:
-                    if let t = Int(inputTime), t > 0 {
-                        result += " 時間:\(t)s"
-                    }
-                case .addIce:
-                    if let w = Double(inputWeight), w > 0 {
-                        result += " 量:\(w)g"
-                    }
-                case .removeDripper, .emptyServer:
-                    break
+                    self.onAdd(result)
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                },
+                label: {
+                    Text("追加")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                        .background(self.canAddStep ? Color("DarkBrown") : Color("DarkBrown").opacity(0.3))
+                        .cornerRadius(8)
                 }
-                self.onAdd(result)
-            }
+            )
+            .contentShape(Rectangle())
+            .disabled(!self.canAddStep)
         }
+        .padding()
     }
 }
 
@@ -215,15 +229,14 @@ private struct SelectableCardList: View {
                             self.onSelect(item)
                         } label: {
                             HStack(spacing: 12) {
-                                Text(item)
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                Spacer()
                                 Image(systemName: "drop.fill")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.green)
+                                Text(item)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
                             }
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
