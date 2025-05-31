@@ -13,14 +13,13 @@ struct CreateBrewMethodStepSelectionSheet: View {
     @State private var inputTime: String = ""
 
     var headerTitle: String {
-        if self.selectedStep == nil {
-            "抽出手順を選択してください"
-        } else if let step = selectedStep, selectedSubStep == nil, !step.subOptions.isEmpty {
-            step.subOptionPrompt ?? "詳細を選択してください"
-        } else if let step = selectedStep, step.needsTimeInput || step.needsWeightInput {
-            step.inputPrompt ?? "情報を入力してください"
+        guard let step = selectedStep else {
+            return "抽出手順を選択してください"
+        }
+        if self.selectedSubStep == nil {
+            return step.subOptionPrompt ?? "抽出手順を選択してください"
         } else {
-            "抽出手順"
+            return step.inputPrompt ?? "抽出手順を選択してください"
         }
     }
 
@@ -89,36 +88,63 @@ private struct StepSelectionContent: View {
     var body: some View {
         if self.selectedStep == nil {
             SelectableCardList(
-                items: stepDefinitions.map(\.title)
+                items: stepDefinitions.map(\ .title)
             ) { title in
                 if let step = stepDefinitions.first(where: { $0.title == title }) {
-                    if !step.subOptions.isEmpty {
+                    switch step.type {
+                    case .pourWater, .stir:
                         self.selectedStep = step
-                    } else if !step.needsWeightInput, !step.needsTimeInput {
-                        self.onSelect(step.title)
-                    } else {
+                    case .addIce, .wait, .removeDripper, .emptyServer:
                         self.selectedStep = step
+                        if step.type == .removeDripper || step.type == .emptyServer {
+                            self.onSelect(step.title)
+                        }
                     }
                 }
             }
-        } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
-            SelectableCardList(
-                items: step.subOptions
-            ) { detail in
-                self.selectedSubStep = detail
-            }
         } else if let step = self.selectedStep {
-            StepDetailInput(
-                step: step,
-                selectedSubStep: self.selectedSubStep,
-                inputWeight: self.$inputWeight,
-                inputTime: self.$inputTime
-            ) { result in
-                self.onSelect(result)
-                self.selectedStep = nil
-                self.selectedSubStep = nil
-                self.inputWeight = ""
-                self.inputTime = ""
+            switch step.type {
+            case .pourWater, .stir:
+                if self.selectedSubStep == nil {
+                    SelectableCardList(
+                        items: step.subOptions
+                    ) { detail in
+                        self.selectedSubStep = detail
+                    }
+                } else {
+                    StepDetailInput(
+                        step: step,
+                        selectedSubStep: self.selectedSubStep,
+                        inputWeight: self.$inputWeight,
+                        inputTime: self.$inputTime
+                    ) { result in
+                        self.onSelect(result)
+                        self.selectedStep = nil
+                        self.selectedSubStep = nil
+                        self.inputWeight = ""
+                        self.inputTime = ""
+                    }
+                }
+            case .addIce, .wait:
+                StepDetailInput(
+                    step: step,
+                    selectedSubStep: self.selectedSubStep,
+                    inputWeight: self.$inputWeight,
+                    inputTime: self.$inputTime
+                ) { result in
+                    self.onSelect(result)
+                    self.selectedStep = nil
+                    self.selectedSubStep = nil
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                }
+            case .removeDripper, .emptyServer:
+                EmptyView()
+                    .task {
+                        self.onSelect(step.title)
+                        self.selectedStep = nil
+                        self.selectedSubStep = nil
+                    }
             }
         }
     }
@@ -134,21 +160,41 @@ private struct StepDetailInput: View {
     var body: some View {
         let finalStep = self.selectedSubStep ?? self.step.title
         Section(header: Text("詳細設定")) {
-            if self.step.needsWeightInput {
+            switch self.step.type {
+            case .pourWater:
                 TextField("量 (g)", text: self.$inputWeight)
                     .keyboardType(.decimalPad)
-            }
-            if self.step.needsTimeInput {
                 TextField("時間 (秒)", text: self.$inputTime)
                     .keyboardType(.numberPad)
+            case .stir, .wait:
+                TextField("時間 (秒)", text: self.$inputTime)
+                    .keyboardType(.numberPad)
+            case .addIce:
+                TextField("量 (g)", text: self.$inputWeight)
+                    .keyboardType(.decimalPad)
+            case .removeDripper, .emptyServer:
+                EmptyView()
             }
             Button("追加") {
                 var result = finalStep
-                if self.step.needsWeightInput, let w = Double(inputWeight), w > 0 {
-                    result += " 量:\(w)g"
-                }
-                if self.step.needsTimeInput, let t = Int(inputTime), t > 0 {
-                    result += " 時間:\(t)s"
+                switch self.step.type {
+                case .pourWater:
+                    if let w = Double(inputWeight), w > 0 {
+                        result += " 量:\(w)g"
+                    }
+                    if let t = Int(inputTime), t > 0 {
+                        result += " 時間:\(t)s"
+                    }
+                case .stir, .wait:
+                    if let t = Int(inputTime), t > 0 {
+                        result += " 時間:\(t)s"
+                    }
+                case .addIce:
+                    if let w = Double(inputWeight), w > 0 {
+                        result += " 量:\(w)g"
+                    }
+                case .removeDripper, .emptyServer:
+                    break
                 }
                 self.onAdd(result)
             }
