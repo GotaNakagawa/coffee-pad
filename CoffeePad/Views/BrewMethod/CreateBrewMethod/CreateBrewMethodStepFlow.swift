@@ -15,7 +15,7 @@ struct CreateBrewMethodStepFlow: View {
                     .bold()
                 CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
             }
-            .padding([.top, .leading, .trailing])
+            .padding([.top, .leading])
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
             VStack {
