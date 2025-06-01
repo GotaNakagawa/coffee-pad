@@ -8,18 +8,24 @@ struct CreateBrewMethodStepFlow: View {
     @State private var draggedItem: String?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("ドリップの流れを追加")
-                .font(.title)
-                .bold()
+        ZStack {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("ドリップの流れを追加")
+                    .font(.title)
+                    .bold()
+                CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
+            }
+            .padding([.top, .leading, .trailing])
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-            CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
-
-            Spacer()
-
-            CreateBrewMethodStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    CreateBrewMethodStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
+                }
+            }
         }
-        .padding()
         .enableInjection()
     }
 }
@@ -35,24 +41,30 @@ private struct CreateBrewMethodStepList: View {
         } else {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(self.steps, id: \.self) { step in
+                    ForEach(self.steps.indices, id: \.self) { index in
+                        let step = self.steps[index]
                         HStack(spacing: 12) {
                             Image(systemName: "drop.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
-                                .foregroundColor(.green)
-
-                            Text(step)
+                                .foregroundColor(Color("DeepGreen"))
+                            Text(self.extractStepTitle(step))
                                 .font(.body)
                                 .foregroundColor(Color.primary)
-
                             Spacer()
+                            Text(self.extractStepValues(step))
+                                .font(.body)
+                                .foregroundColor(Color("DeepGreen"))
                         }
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(Color.white)
-                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color("DarkBrown"), lineWidth: 3)
+                        )
+                        .cornerRadius(10)
                         .shadow(radius: 2)
                         .onDrag {
                             self.draggedItem = step
@@ -68,8 +80,28 @@ private struct CreateBrewMethodStepList: View {
                         )
                     }
                 }
+                .padding(.trailing, 12)
             }
         }
+    }
+
+    private func extractStepTitle(_ step: String) -> String {
+        if let range = step.range(of: "[0-9]+g|[0-9]+s", options: .regularExpression) {
+            return String(step[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+        }
+        return step
+    }
+
+    private func extractStepValues(_ step: String) -> String {
+        let regex = try? NSRegularExpression(pattern: "[0-9]+g|[0-9]+s")
+        let matches = regex?.matches(in: step, range: NSRange(step.startIndex..., in: step)) ?? []
+        let values = matches.compactMap { match -> String? in
+            if let range = Range(match.range, in: step) {
+                return String(step[range])
+            }
+            return nil
+        }
+        return values.joined(separator: " ")
     }
 }
 
