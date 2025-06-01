@@ -48,16 +48,37 @@ private struct CreateBrewMethodStepList: View {
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(Color("DeepGreen"))
-                            Text(self.extractStepTitle(step))
-                                .font(.body)
-                                .foregroundColor(Color.primary)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(step.title)
+                                    .font(.body)
+                                    .foregroundColor(Color.primary)
+                                HStack(spacing: 8) {
+                                    if let w = step.weight {
+                                        Text("\(w)g")
+                                            .font(.body)
+                                            .foregroundColor(Color("DeepGreen"))
+                                    }
+                                    if let t = step.time {
+                                        Text("\(t)s")
+                                            .font(.body)
+                                            .foregroundColor(Color("DeepGreen"))
+                                    }
+                                }
+                            }
                             Spacer()
-                            Text(self.extractStepValues(step))
-                                .font(.body)
-                                .foregroundColor(Color("DeepGreen"))
+                            Button(action: {
+                                if let idx = self.steps.firstIndex(where: { $0.id == step.id }) {
+                                    self.steps.remove(at: idx)
+                                }
+                            }, label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(Color.primary)
+                            })
+                            .buttonStyle(.plain)
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal)
                         .background(Color.white)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
@@ -70,25 +91,6 @@ private struct CreateBrewMethodStepList: View {
                 .padding(.trailing, 12)
             }
         }
-    }
-
-    private func extractStepTitle(_ step: BrewStep) -> String {
-        if let range = step.title.range(of: "[0-9]+g|[0-9]+s", options: .regularExpression) {
-            return String(step.title[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
-        }
-        return step.title
-    }
-
-    private func extractStepValues(_ step: BrewStep) -> String {
-        let regex = try? NSRegularExpression(pattern: "[0-9]+g|[0-9]+s")
-        let matches = regex?.matches(in: step.title, range: NSRange(step.title.startIndex..., in: step.title)) ?? []
-        let values = matches.compactMap { match -> String? in
-            if let range = Range(match.range, in: step.title) {
-                return String(step.title[range])
-            }
-            return nil
-        }
-        return values.joined(separator: " ")
     }
 }
 
