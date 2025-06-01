@@ -1,6 +1,6 @@
 import Foundation
 
-enum MethodType: String {
+enum MethodType: String, Codable {
     case pourWater
     case stir
     case addIce
@@ -19,13 +19,14 @@ struct StepDefinition {
     let inputPrompt: String?
 }
 
-struct BrewStep: Identifiable, Equatable {
-    let id = UUID()
+struct BrewStep: Identifiable, Equatable, Codable {
+    var id = UUID()
     var type: MethodType
     var title: String
     var subOption: String?
     var weight: Int?
     var time: Int?
+    var comment: String
 }
 
 let stepDefinitions: [StepDefinition] = [

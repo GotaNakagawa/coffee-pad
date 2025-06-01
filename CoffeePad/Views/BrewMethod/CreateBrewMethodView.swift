@@ -12,6 +12,7 @@ struct CreateBrewMethodView: View {
     @State private var coffeeAmount: String = ""
     @State private var waterTemp: String = ""
     @State private var brewSteps: [BrewStep] = []
+    @State private var comment: String = ""
 
     let grindOptions = ["極細挽き", "細挽き", "中挽き", "粗挽き", "極粗挽き"]
 
@@ -61,6 +62,7 @@ struct CreateBrewMethodView: View {
                 coffeeAmount: self.$coffeeAmount,
                 waterTemp: self.$waterTemp,
                 brewSteps: self.$brewSteps,
+                comment: self.$comment,
                 grindOptions: self.grindOptions
             )
             .animation(.easeInOut, value: self.currentStep)
@@ -72,12 +74,26 @@ struct CreateBrewMethodView: View {
                     if self.currentStep < self.totalSteps - 1 {
                         self.currentStep += 1
                     } else {
-                        print("作成完了: \(self.methodName), \(self.grindSize), \(self.coffeeAmount)g, \(self.waterTemp)℃")
-                        for (i, step) in self.brewSteps.enumerated() {
-                            print(
-                                "手順\(i + 1): \(step.title) \(step.subOption ?? "") \(step.weight.map { "\($0)g" } ?? "") \(step.time.map { "\($0)s" } ?? "")"
-                            )
+                        let newMethod = BrewMethod(
+                            id: Int(Date().timeIntervalSince1970),
+                            title: self.methodName,
+                            comment: self.comment,
+                            amount: Int(self.coffeeAmount) ?? 0,
+                            grind: self.grindSize,
+                            temp: Int(self.waterTemp) ?? 0,
+                            weight: self.brewSteps.reduce(0) { $0 + ($1.weight ?? 0) },
+                            date: DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .none)
+                        )
+                        var methods: [BrewMethod] = []
+                        if let data = UserDefaults.standard.data(forKey: "brewMethods"),
+                           let saved = try? JSONDecoder().decode([BrewMethod].self, from: data) {
+                            methods = saved
                         }
+                        methods.append(newMethod)
+                        if let data = try? JSONEncoder().encode(methods) {
+                            UserDefaults.standard.set(data, forKey: "brewMethods")
+                        }
+                        self.dismiss()
                     }
                 },
                 label: {

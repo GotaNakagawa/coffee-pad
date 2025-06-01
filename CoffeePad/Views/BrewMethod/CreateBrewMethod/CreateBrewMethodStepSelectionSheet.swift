@@ -102,7 +102,8 @@ private struct StepSelectionContent: View {
                                 title: step.title,
                                 subOption: nil,
                                 weight: nil,
-                                time: nil
+                                time: nil,
+                                comment: ""
                             ))
                         }
                     }
@@ -129,7 +130,8 @@ private struct StepSelectionContent: View {
                             title: step.title,
                             subOption: self.selectedSubStep,
                             weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
-                            time: self.inputTime.isEmpty ? nil : Int(self.inputTime)
+                            time: self.inputTime.isEmpty ? nil : Int(self.inputTime),
+                            comment: ""
                         ))
                         self.selectedStep = nil
                         self.selectedSubStep = nil
@@ -149,7 +151,8 @@ private struct StepSelectionContent: View {
                         title: step.title,
                         subOption: self.selectedSubStep,
                         weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
-                        time: self.inputTime.isEmpty ? nil : Int(self.inputTime)
+                        time: self.inputTime.isEmpty ? nil : Int(self.inputTime),
+                        comment: ""
                     ))
                     self.selectedStep = nil
                     self.selectedSubStep = nil
@@ -164,7 +167,8 @@ private struct StepSelectionContent: View {
                             title: step.title,
                             subOption: nil,
                             weight: nil,
-                            time: nil
+                            time: nil,
+                            comment: ""
                         ))
                         self.selectedStep = nil
                         self.selectedSubStep = nil

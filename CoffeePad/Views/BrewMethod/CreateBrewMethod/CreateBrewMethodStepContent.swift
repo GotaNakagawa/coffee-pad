@@ -7,6 +7,7 @@ struct CreateBrewMethodStepContent: View {
     @Binding var coffeeAmount: String
     @Binding var waterTemp: String
     @Binding var brewSteps: [BrewStep]
+    @Binding var comment: String
     let grindOptions: [String]
 
     var body: some View {
@@ -44,6 +45,13 @@ struct CreateBrewMethodStepContent: View {
         case 4:
             CreateBrewMethodStepFlow(steps: self.$brewSteps)
         case 5:
+            CreateBrewMethodStepTextField(
+                title: "コメント",
+                description: "メソッドに関するコメントやメモを入力してください",
+                text: self.$comment,
+                placeholder: "例: このレシピは初心者向けです"
+            )
+        case 6:
             VStack(alignment: .leading, spacing: 16) {
                 Text("入力内容の確認")
                     .font(.title2)

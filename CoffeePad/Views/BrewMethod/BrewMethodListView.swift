@@ -5,68 +5,7 @@ struct BrewMethodListView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
 
-    let methods: [BrewMethod] = [
-        .init(
-            id: 1,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "4月18日 金曜日"
-        ),
-        .init(
-            id: 2,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "4月18日 金曜日"
-        ),
-        .init(
-            id: 3,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "2月18日 金曜日"
-        ),
-        .init(
-            id: 4,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "4月18日 金曜日"
-        ),
-        .init(
-            id: 5,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "4月18日 金曜日"
-        ),
-        .init(
-            id: 6,
-            title: "メソッド名",
-            comment: "備考",
-            amount: 200,
-            grind: "中挽き",
-            temp: 95,
-            weight: 225,
-            date: "2月18日 金曜日"
-        ),
-    ]
+    @State private var methods: [BrewMethod] = []
 
     let colors: [Color] = [
         Color("DeepGreen"),
@@ -82,7 +21,7 @@ struct BrewMethodListView: View {
 
                 Spacer()
 
-                BrewMethodListStats()
+                BrewMethodListStats(methods: self.methods)
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
@@ -108,5 +47,11 @@ struct BrewMethodListView: View {
         }
         .navigationBarHidden(true)
         .enableInjection()
+        .onAppear {
+            if let data = UserDefaults.standard.data(forKey: "brewMethods"),
+               let saved = try? JSONDecoder().decode([BrewMethod].self, from: data) {
+                self.methods = saved
+            }
+        }
     }
 }
