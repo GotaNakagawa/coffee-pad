@@ -5,7 +5,7 @@ import SwiftUI
 struct CreateBrewMethodStepSelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
     @ObserveInjection var inject
-    let onSelect: (String) -> Void
+    let onSelect: (BrewStep) -> Void
 
     @State private var selectedStep: StepDefinition? = nil
     @State private var selectedSubStep: String? = nil
@@ -83,7 +83,7 @@ private struct StepSelectionContent: View {
     @Binding var selectedSubStep: String?
     @Binding var inputWeight: String
     @Binding var inputTime: String
-    let onSelect: (String) -> Void
+    let onSelect: (BrewStep) -> Void
 
     var body: some View {
         if self.selectedStep == nil {
@@ -97,7 +97,13 @@ private struct StepSelectionContent: View {
                     case .addIce, .wait, .removeDripper, .emptyServer:
                         self.selectedStep = step
                         if step.type == .removeDripper || step.type == .emptyServer {
-                            self.onSelect(step.title)
+                            self.onSelect(BrewStep(
+                                type: step.type,
+                                title: step.title,
+                                subOption: nil,
+                                weight: nil,
+                                time: nil
+                            ))
                         }
                     }
                 }
@@ -117,8 +123,14 @@ private struct StepSelectionContent: View {
                         selectedSubStep: self.selectedSubStep,
                         inputWeight: self.$inputWeight,
                         inputTime: self.$inputTime
-                    ) { result in
-                        self.onSelect(result)
+                    ) { _ in
+                        self.onSelect(BrewStep(
+                            type: step.type,
+                            title: step.title,
+                            subOption: self.selectedSubStep,
+                            weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
+                            time: self.inputTime.isEmpty ? nil : Int(self.inputTime)
+                        ))
                         self.selectedStep = nil
                         self.selectedSubStep = nil
                         self.inputWeight = ""
@@ -131,8 +143,14 @@ private struct StepSelectionContent: View {
                     selectedSubStep: self.selectedSubStep,
                     inputWeight: self.$inputWeight,
                     inputTime: self.$inputTime
-                ) { result in
-                    self.onSelect(result)
+                ) { _ in
+                    self.onSelect(BrewStep(
+                        type: step.type,
+                        title: step.title,
+                        subOption: self.selectedSubStep,
+                        weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
+                        time: self.inputTime.isEmpty ? nil : Int(self.inputTime)
+                    ))
                     self.selectedStep = nil
                     self.selectedSubStep = nil
                     self.inputWeight = ""
@@ -141,7 +159,13 @@ private struct StepSelectionContent: View {
             case .removeDripper, .emptyServer:
                 EmptyView()
                     .task {
-                        self.onSelect(step.title)
+                        self.onSelect(BrewStep(
+                            type: step.type,
+                            title: step.title,
+                            subOption: nil,
+                            weight: nil,
+                            time: nil
+                        ))
                         self.selectedStep = nil
                         self.selectedSubStep = nil
                     }

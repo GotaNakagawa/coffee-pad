@@ -6,7 +6,7 @@ struct CreateBrewMethodStepContent: View {
     @Binding var grindSize: String
     @Binding var coffeeAmount: String
     @Binding var waterTemp: String
-    @Binding var brewSteps: [String]
+    @Binding var brewSteps: [BrewStep]
     let grindOptions: [String]
 
     var body: some View {
@@ -43,6 +43,26 @@ struct CreateBrewMethodStepContent: View {
             )
         case 4:
             CreateBrewMethodStepFlow(steps: self.$brewSteps)
+        case 5:
+            VStack(alignment: .leading, spacing: 16) {
+                Text("入力内容の確認")
+                    .font(.title2)
+                    .bold()
+                Text("メソッド名: \(self.methodName)")
+                Text("豆のひき目: \(self.grindSize)")
+                Text("粉の量: \(self.coffeeAmount)g")
+                Text("お湯の温度: \(self.waterTemp)℃")
+                Text("手順:")
+                ForEach(self.brewSteps) { step in
+                    HStack(spacing: 8) {
+                        Text(step.title)
+                        if let sub = step.subOption { Text("（\(sub)）") }
+                        if let w = step.weight { Text("\(w)g") }
+                        if let t = step.time { Text("\(t)s") }
+                    }
+                }
+            }
+            .padding()
         default:
             Text("完了！")
         }

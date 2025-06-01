@@ -3,9 +3,9 @@ import SwiftUI
 
 struct CreateBrewMethodStepFlow: View {
     @ObserveInjection var inject
-    @Binding var steps: [String]
+    @Binding var steps: [BrewStep]
     @State private var showSheet = false
-    @State private var draggedItem: String?
+    @State private var draggedItem: BrewStep?
 
     var body: some View {
         ZStack {
@@ -31,8 +31,8 @@ struct CreateBrewMethodStepFlow: View {
 }
 
 private struct CreateBrewMethodStepList: View {
-    @Binding var steps: [String]
-    @Binding var draggedItem: String?
+    @Binding var steps: [BrewStep]
+    @Binding var draggedItem: BrewStep?
 
     var body: some View {
         if self.steps.isEmpty {
@@ -41,8 +41,7 @@ private struct CreateBrewMethodStepList: View {
         } else {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(self.steps.indices, id: \.self) { index in
-                        let step = self.steps[index]
+                    ForEach(self.steps) { step in
                         HStack(spacing: 12) {
                             Image(systemName: "drop.fill")
                                 .resizable()
@@ -66,18 +65,6 @@ private struct CreateBrewMethodStepList: View {
                         )
                         .cornerRadius(10)
                         .shadow(radius: 2)
-                        .onDrag {
-                            self.draggedItem = step
-                            return NSItemProvider(object: step as NSString)
-                        }
-                        .onDrop(
-                            of: [.text],
-                            delegate: StepDropDelegate(
-                                item: step,
-                                steps: self.$steps,
-                                draggedItem: self.$draggedItem
-                            )
-                        )
                     }
                 }
                 .padding(.trailing, 12)
@@ -85,19 +72,19 @@ private struct CreateBrewMethodStepList: View {
         }
     }
 
-    private func extractStepTitle(_ step: String) -> String {
-        if let range = step.range(of: "[0-9]+g|[0-9]+s", options: .regularExpression) {
-            return String(step[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
+    private func extractStepTitle(_ step: BrewStep) -> String {
+        if let range = step.title.range(of: "[0-9]+g|[0-9]+s", options: .regularExpression) {
+            return String(step.title[..<range.lowerBound]).trimmingCharacters(in: .whitespaces)
         }
-        return step
+        return step.title
     }
 
-    private func extractStepValues(_ step: String) -> String {
+    private func extractStepValues(_ step: BrewStep) -> String {
         let regex = try? NSRegularExpression(pattern: "[0-9]+g|[0-9]+s")
-        let matches = regex?.matches(in: step, range: NSRange(step.startIndex..., in: step)) ?? []
+        let matches = regex?.matches(in: step.title, range: NSRange(step.title.startIndex..., in: step.title)) ?? []
         let values = matches.compactMap { match -> String? in
-            if let range = Range(match.range, in: step) {
-                return String(step[range])
+            if let range = Range(match.range, in: step.title) {
+                return String(step.title[range])
             }
             return nil
         }
@@ -106,9 +93,9 @@ private struct CreateBrewMethodStepList: View {
 }
 
 struct StepDropDelegate: DropDelegate {
-    let item: String
-    @Binding var steps: [String]
-    @Binding var draggedItem: String?
+    let item: BrewStep
+    @Binding var steps: [BrewStep]
+    @Binding var draggedItem: BrewStep?
 
     func performDrop(info _: DropInfo) -> Bool {
         self.draggedItem = nil
@@ -130,7 +117,7 @@ struct StepDropDelegate: DropDelegate {
 }
 
 private struct CreateBrewMethodStepAddButton: View {
-    @Binding var steps: [String]
+    @Binding var steps: [BrewStep]
     @Binding var showSheet: Bool
 
     var body: some View {

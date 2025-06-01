@@ -5,13 +5,13 @@ struct CreateBrewMethodView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
     @State private var currentStep = 0
-    private let totalSteps = 5
+    private let totalSteps = 6
 
     @State private var methodName: String = ""
     @State private var grindSize: String = "中挽き"
     @State private var coffeeAmount: String = ""
     @State private var waterTemp: String = ""
-    @State private var brewSteps: [String] = []
+    @State private var brewSteps: [BrewStep] = []
 
     let grindOptions = ["極細挽き", "細挽き", "中挽き", "粗挽き", "極粗挽き"]
 
@@ -73,6 +73,11 @@ struct CreateBrewMethodView: View {
                         self.currentStep += 1
                     } else {
                         print("作成完了: \(self.methodName), \(self.grindSize), \(self.coffeeAmount)g, \(self.waterTemp)℃")
+                        for (i, step) in self.brewSteps.enumerated() {
+                            print(
+                                "手順\(i + 1): \(step.title) \(step.subOption ?? "") \(step.weight.map { "\($0)g" } ?? "") \(step.time.map { "\($0)s" } ?? "")"
+                            )
+                        }
                     }
                 },
                 label: {

@@ -19,6 +19,15 @@ struct StepDefinition {
     let inputPrompt: String?
 }
 
+struct BrewStep: Identifiable, Equatable {
+    let id = UUID()
+    var type: MethodType
+    var title: String
+    var subOption: String?
+    var weight: Int?
+    var time: Int?
+}
+
 let stepDefinitions: [StepDefinition] = [
     StepDefinition(
         type: .pourWater,
