@@ -48,23 +48,7 @@ private struct CreateBrewMethodStepList: View {
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
                                 .foregroundColor(Color("DeepGreen"))
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(step.title)
-                                    .font(.body)
-                                    .foregroundColor(Color.primary)
-                                HStack(spacing: 8) {
-                                    if let w = step.weight {
-                                        Text("\(w)g")
-                                            .font(.body)
-                                            .foregroundColor(Color("DeepGreen"))
-                                    }
-                                    if let t = step.time {
-                                        Text("\(t)s")
-                                            .font(.body)
-                                            .foregroundColor(Color("DeepGreen"))
-                                    }
-                                }
-                            }
+                            BrewStepInfoView(step: step)
                             Spacer()
                             Button(action: {
                                 if let idx = self.steps.firstIndex(where: { $0.id == step.id }) {
@@ -86,6 +70,14 @@ private struct CreateBrewMethodStepList: View {
                         )
                         .cornerRadius(10)
                         .shadow(radius: 2)
+                        .onDrag {
+                            self.draggedItem = step
+                            return NSItemProvider(object: NSString(string: step.id.uuidString))
+                        }
+                        .onDrop(
+                            of: [.text],
+                            delegate: StepDropDelegate(item: step, steps: self.$steps, draggedItem: self.$draggedItem)
+                        )
                     }
                 }
                 .padding(.trailing, 12)
@@ -141,6 +133,29 @@ private struct CreateBrewMethodStepAddButton: View {
                 CreateBrewMethodStepSelectionSheet { selectedStep in
                     self.steps.append(selectedStep)
                     self.showSheet = false
+                }
+            }
+        }
+    }
+}
+
+private struct BrewStepInfoView: View {
+    let step: BrewStep
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(self.step.title)
+                .font(.body)
+                .foregroundColor(Color.primary)
+            HStack(spacing: 8) {
+                if let w = step.weight {
+                    Text("\(w)g")
+                        .font(.body)
+                        .foregroundColor(Color("DeepGreen"))
+                }
+                if let t = step.time {
+                    Text("\(t)s")
+                        .font(.body)
+                        .foregroundColor(Color("DeepGreen"))
                 }
             }
         }
