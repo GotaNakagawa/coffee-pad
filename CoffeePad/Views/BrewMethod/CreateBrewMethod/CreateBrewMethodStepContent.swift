@@ -1,7 +1,12 @@
 import SwiftUI
 
+enum BrewStepType: Int, CaseIterable {
+    case methodName, grindSize, coffeeAmount, waterTemp, brewSteps, comment, confirm
+}
+
 struct CreateBrewMethodStepContent: View {
-    let currentStep: Int
+    static let stepCount = BrewStepType.allCases.count
+    let currentStep: BrewStepType
     @Binding var methodName: String
     @Binding var grindSize: String
     @Binding var coffeeAmount: String
@@ -12,21 +17,21 @@ struct CreateBrewMethodStepContent: View {
 
     var body: some View {
         switch self.currentStep {
-        case 0:
+        case .methodName:
             CreateBrewMethodStepTextField(
                 title: "抽出メソッド名は",
                 description: "オリジナルの名前をつけましょう",
                 text: self.$methodName,
                 placeholder: "例: マイルドドリップ"
             )
-        case 1:
+        case .grindSize:
             CreateBrewMethodStepPicker(
                 title: "豆のひき目",
                 description: "使用するコーヒー豆の挽き方を選んでください",
                 selection: self.$grindSize,
                 options: self.grindOptions
             )
-        case 2:
+        case .coffeeAmount:
             CreateBrewMethodStepTextField(
                 title: "粉の量",
                 description: "グラムで入力してください",
@@ -34,7 +39,7 @@ struct CreateBrewMethodStepContent: View {
                 placeholder: "15",
                 keyboardType: .numberPad
             )
-        case 3:
+        case .waterTemp:
             CreateBrewMethodStepTextField(
                 title: "お湯の温度は？",
                 description: "温度を℃で入力してください",
@@ -42,16 +47,16 @@ struct CreateBrewMethodStepContent: View {
                 placeholder: "90",
                 keyboardType: .numberPad
             )
-        case 4:
+        case .brewSteps:
             CreateBrewMethodStepFlow(steps: self.$brewSteps)
-        case 5:
+        case .comment:
             CreateBrewMethodStepTextField(
                 title: "コメント",
                 description: "メソッドに関するコメントやメモを入力してください",
                 text: self.$comment,
                 placeholder: "例: このレシピは初心者向けです"
             )
-        case 6:
+        case .confirm:
             VStack(alignment: .leading, spacing: 16) {
                 Text("入力内容の確認")
                     .font(.title2)
@@ -71,8 +76,6 @@ struct CreateBrewMethodStepContent: View {
                 }
             }
             .padding()
-        default:
-            Text("完了！")
         }
     }
 }
