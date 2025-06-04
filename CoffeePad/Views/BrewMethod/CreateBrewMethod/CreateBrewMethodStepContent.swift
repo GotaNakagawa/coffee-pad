@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum BrewStepType: Int, CaseIterable {
-    case methodName, grindSize, coffeeAmount, waterTemp, brewSteps, comment, confirm
+    case methodName, grindSize, coffeeAmount, waterTemp, brewSteps, coffeeVolume, comment, confirm
 }
 
 struct CreateBrewMethodStepContent: View {
@@ -11,6 +11,7 @@ struct CreateBrewMethodStepContent: View {
     @Binding var grindSize: String
     @Binding var coffeeAmount: String
     @Binding var waterTemp: String
+    @Binding var coffeeVolume: String
     @Binding var brewSteps: [BrewStep]
     @Binding var comment: String
     let grindOptions: [String]
@@ -19,21 +20,21 @@ struct CreateBrewMethodStepContent: View {
         switch self.currentStep {
         case .methodName:
             CreateBrewMethodStepTextField(
-                title: "抽出メソッド名は",
+                title: "抽出メソッド名は？",
                 description: "オリジナルの名前をつけましょう",
                 text: self.$methodName,
                 placeholder: "例: マイルドドリップ"
             )
         case .grindSize:
             CreateBrewMethodStepPicker(
-                title: "豆のひき目",
+                title: "豆のひき目は？",
                 description: "使用するコーヒー豆の挽き方を選んでください",
                 selection: self.$grindSize,
                 options: self.grindOptions
             )
         case .coffeeAmount:
             CreateBrewMethodStepTextField(
-                title: "粉の量",
+                title: "粉の量は？",
                 description: "グラムで入力してください",
                 text: self.$coffeeAmount,
                 placeholder: "15",
@@ -49,6 +50,14 @@ struct CreateBrewMethodStepContent: View {
             )
         case .brewSteps:
             CreateBrewMethodStepFlow(steps: self.$brewSteps)
+        case .coffeeVolume:
+            CreateBrewMethodStepTextField(
+                title: "コーヒーの量",
+                description: "出来上がりのコーヒー量をmlで入力してください",
+                text: self.$coffeeVolume,
+                placeholder: "例: 200",
+                keyboardType: .numberPad
+            )
         case .comment:
             CreateBrewMethodStepTextField(
                 title: "コメント",
@@ -57,25 +66,15 @@ struct CreateBrewMethodStepContent: View {
                 placeholder: "例: このレシピは初心者向けです"
             )
         case .confirm:
-            VStack(alignment: .leading, spacing: 16) {
-                Text("入力内容の確認")
-                    .font(.title2)
-                    .bold()
-                Text("メソッド名: \(self.methodName)")
-                Text("豆のひき目: \(self.grindSize)")
-                Text("粉の量: \(self.coffeeAmount)g")
-                Text("お湯の温度: \(self.waterTemp)℃")
-                Text("手順:")
-                ForEach(self.brewSteps) { step in
-                    HStack(spacing: 8) {
-                        Text(step.title)
-                        if let sub = step.subOption { Text("（\(sub)）") }
-                        if let w = step.weight { Text("\(w)g") }
-                        if let t = step.time { Text("\(t)s") }
-                    }
-                }
-            }
-            .padding()
+            BrewMethodConfirmView(
+                methodName: self.methodName,
+                grindSize: self.grindSize,
+                grindMemo: nil,
+                coffeeAmount: self.coffeeAmount,
+                coffeeVolume: self.coffeeVolume,
+                waterTemp: self.waterTemp,
+                steps: self.brewSteps
+            )
         }
     }
 }

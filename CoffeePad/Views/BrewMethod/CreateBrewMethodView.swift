@@ -11,10 +11,11 @@ struct CreateBrewMethodView: View {
     @State private var grindSize: String = "中挽き"
     @State private var coffeeAmount: String = ""
     @State private var waterTemp: String = ""
+    @State private var coffeeVolume: String = ""
     @State private var brewSteps: [BrewStep] = []
     @State private var comment: String = ""
 
-    let grindOptions = ["極細挽き", "細挽き", "中挽き", "粗挽き", "極粗挽き"]
+    let grindOptions = ["極細挽き", "細挽き", "中粗挽き", "中挽き", "中細挽き", "粗挽き", "極粗挽き"]
 
     var canProceedToNextStep: Bool {
         switch self.currentStep {
@@ -62,6 +63,7 @@ struct CreateBrewMethodView: View {
                 grindSize: self.$grindSize,
                 coffeeAmount: self.$coffeeAmount,
                 waterTemp: self.$waterTemp,
+                coffeeVolume: self.$coffeeVolume,
                 brewSteps: self.$brewSteps,
                 comment: self.$comment,
                 grindOptions: self.grindOptions
