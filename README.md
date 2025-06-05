@@ -46,7 +46,7 @@ https://qiita.com/y-hirakaw/items/1fba72344912d1f3912c
    https://github.com/nicklockwood/SwiftFormat
    ```
 
-3. `Build Phases` に `Run Script` を追加し、以下を記述：
+2. `Build Phases` に `Run Script` を追加し、以下を記述：
 
    ```bash
    if [[ -e "${BUILD_ROOT}/../../SourcePackages/checkouts/SwiftFormat/CommandLineTool/swiftformat" ]]; then
