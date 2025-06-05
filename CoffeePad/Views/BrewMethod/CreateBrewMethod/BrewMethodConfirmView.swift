@@ -55,30 +55,7 @@ struct BrewMethodConfirmView: View {
                 .font(.headline)
                 .padding(.top, 8)
             ForEach(self.steps) { step in
-                HStack(alignment: .center, spacing: 12) {
-                    Image(systemName: "hourglass")
-                        .resizable()
-                        .frame(width: 28, height: 28)
-                    VStack(alignment: .leading) {
-                        Text(step.title)
-                        if let sub = step.subOption, !sub.isEmpty {
-                            Text(sub)
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                        }
-                    }
-                    Spacer()
-                    if let t = step.time {
-                        Text(String(format: "%02d:%02d", t / 60, t % 60))
-                            .font(.body)
-                            .foregroundColor(.gray)
-                    }
-                    if let w = step.weight {
-                        Text("\(w)ml")
-                            .font(.body)
-                            .foregroundColor(.gray)
-                    }
-                }
+                StepRowView(step: step)
             }
         }
         .padding()
@@ -107,6 +84,45 @@ struct BrewMethodConfirmView: View {
                 Spacer()
                 Text(self.value)
                     .font(.title3)
+            }
+        }
+    }
+
+    private struct StepRowView: View {
+        let step: BrewStep
+
+        var body: some View {
+            HStack(alignment: .top, spacing: 12) {
+                Image(systemName: "hourglass")
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 40, height: 40)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(step.title)
+                    if let sub = step.subOption, !sub.isEmpty {
+                        Text(sub)
+                            .font(.caption)
+                            .foregroundColor(.gray)
+                    }
+                    if !step.comment.isEmpty {
+                        Text(step.comment)
+                            .font(.caption2)
+                            .foregroundColor(.gray)
+                    }
+                }
+                Spacer()
+                VStack(alignment: .trailing, spacing: 2) {
+                    if let w = step.weight {
+                        Text("\(w)ml")
+                            .font(.body)
+                            .foregroundColor(.gray)
+                    }
+                    if let t = step.time {
+                        Text(String(format: "%02d:%02d", t / 60, t % 60))
+                            .font(.body)
+                            .foregroundColor(.gray)
+                    }
+                }
             }
         }
     }
