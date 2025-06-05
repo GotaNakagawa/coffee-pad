@@ -5,28 +5,60 @@ import SwiftUI
 struct CreateBrewMethodStepSelectionSheet: View {
     @Environment(\.dismiss) private var dismiss
     @ObserveInjection var inject
-    let onSelect: (String) -> Void
+    let onSelect: (BrewStep) -> Void
 
     @State private var selectedStep: StepDefinition? = nil
     @State private var selectedSubStep: String? = nil
     @State private var inputWeight: String = ""
     @State private var inputTime: String = ""
 
+    var headerTitle: String {
+        guard let step = selectedStep else {
+            return "抽出手順を選択してください"
+        }
+        if self.selectedSubStep == nil {
+            return step.subOptionPrompt ?? "抽出手順を選択してください"
+        } else {
+            return step.inputPrompt ?? "抽出手順を選択してください"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             HStack {
-                Text("手順を選択")
-                    .font(.headline)
-                    .padding()
-                Spacer()
-                Button(action: { self.dismiss() }, label: {
-                    Image(systemName: "xmark")
-                        .font(.title2)
-                        .foregroundColor(.gray)
-                        .padding()
-                })
+                ZStack {
+                    Text(self.headerTitle)
+                        .font(.headline)
+                    HStack {
+                        if self.selectedStep == nil {
+                            Button(action: { self.dismiss() }, label: {
+                                Image(systemName: "xmark")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            })
+                        } else {
+                            Button(action: {
+                                if self.selectedSubStep != nil {
+                                    self.selectedSubStep = nil
+                                    self.inputWeight = ""
+                                    self.inputTime = ""
+                                } else {
+                                    self.selectedStep = nil
+                                    self.selectedSubStep = nil
+                                }
+                            }, label: {
+                                Image(systemName: "chevron.backward")
+                                    .font(.title2)
+                                    .foregroundColor(.gray)
+                                    .padding()
+                            })
+                        }
+                        Spacer()
+                    }
+                }
+                .padding()
             }
-            .padding()
 
             Divider()
 
@@ -51,59 +83,97 @@ private struct StepSelectionContent: View {
     @Binding var selectedSubStep: String?
     @Binding var inputWeight: String
     @Binding var inputTime: String
-    let onSelect: (String) -> Void
+    let onSelect: (BrewStep) -> Void
 
     var body: some View {
         if self.selectedStep == nil {
             SelectableCardList(
-                title: nil,
-                items: stepDefinitions.map(\.title),
-                onSelect: { title in
-                    if let step = stepDefinitions.first(where: { $0.title == title }) {
-                        if !step.subOptions.isEmpty {
-                            self.selectedStep = step
-                        } else if !step.needsWeightInput, !step.needsTimeInput {
-                            self.onSelect(step.title)
-                        } else {
-                            self.selectedStep = step
+                items: stepDefinitions.map(\ .title)
+            ) { title in
+                if let step = stepDefinitions.first(where: { $0.title == title }) {
+                    switch step.type {
+                    case .pourWater, .stir:
+                        self.selectedStep = step
+                    case .addIce, .wait, .removeDripper, .emptyServer:
+                        self.selectedStep = step
+                        if step.type == .removeDripper || step.type == .emptyServer {
+                            self.onSelect(BrewStep(
+                                type: step.type,
+                                title: step.title,
+                                subOption: nil,
+                                weight: nil,
+                                time: nil,
+                                comment: ""
+                            ))
                         }
                     }
-                },
-                backButtonTitle: nil,
-                onBack: nil
-            )
-        } else if let step = self.selectedStep, self.selectedSubStep == nil, !step.subOptions.isEmpty {
-            SelectableCardList(
-                title: step.title,
-                items: step.subOptions,
-                onSelect: { detail in
-                    self.selectedSubStep = detail
-                },
-                backButtonTitle: "← 戻る",
-                onBack: {
-                    self.selectedStep = nil
-                    self.selectedSubStep = nil
                 }
-            )
+            }
         } else if let step = self.selectedStep {
-            StepDetailInput(
-                step: step,
-                selectedSubStep: self.selectedSubStep,
-                inputWeight: self.$inputWeight,
-                inputTime: self.$inputTime,
-                onAdd: { result in
-                    self.onSelect(result)
+            switch step.type {
+            case .pourWater, .stir:
+                if self.selectedSubStep == nil {
+                    SelectableCardList(
+                        items: step.subOptions
+                    ) { detail in
+                        self.selectedSubStep = detail
+                    }
+                } else {
+                    StepDetailInput(
+                        step: step,
+                        selectedSubStep: self.selectedSubStep,
+                        inputWeight: self.$inputWeight,
+                        inputTime: self.$inputTime
+                    ) { _ in
+                        self.onSelect(BrewStep(
+                            type: step.type,
+                            title: step.title,
+                            subOption: self.selectedSubStep,
+                            weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
+                            time: self.inputTime.isEmpty ? nil : Int(self.inputTime),
+                            comment: ""
+                        ))
+                        self.selectedStep = nil
+                        self.selectedSubStep = nil
+                        self.inputWeight = ""
+                        self.inputTime = ""
+                    }
+                }
+            case .addIce, .wait:
+                StepDetailInput(
+                    step: step,
+                    selectedSubStep: self.selectedSubStep,
+                    inputWeight: self.$inputWeight,
+                    inputTime: self.$inputTime
+                ) { _ in
+                    self.onSelect(BrewStep(
+                        type: step.type,
+                        title: step.title,
+                        subOption: self.selectedSubStep,
+                        weight: self.inputWeight.isEmpty ? nil : Int(self.inputWeight),
+                        time: self.inputTime.isEmpty ? nil : Int(self.inputTime),
+                        comment: ""
+                    ))
                     self.selectedStep = nil
                     self.selectedSubStep = nil
                     self.inputWeight = ""
                     self.inputTime = ""
-                },
-                onBack: {
-                    self.selectedSubStep = nil
-                    self.inputWeight = ""
-                    self.inputTime = ""
                 }
-            )
+            case .removeDripper, .emptyServer:
+                EmptyView()
+                    .task {
+                        self.onSelect(BrewStep(
+                            type: step.type,
+                            title: step.title,
+                            subOption: nil,
+                            weight: nil,
+                            time: nil,
+                            comment: ""
+                        ))
+                        self.selectedStep = nil
+                        self.selectedSubStep = nil
+                    }
+            }
         }
     }
 }
@@ -114,52 +184,72 @@ private struct StepDetailInput: View {
     @Binding var inputWeight: String
     @Binding var inputTime: String
     let onAdd: (String) -> Void
-    let onBack: () -> Void
+
+    private var canAddStep: Bool {
+        var ok = true
+        if self.step.needsWeightInput {
+            ok = ok && (Int(self.inputWeight) ?? 0) > 0
+        }
+        if self.step.needsTimeInput {
+            ok = ok && (Int(self.inputTime) ?? 0) > 0
+        }
+        return ok
+    }
 
     var body: some View {
         let finalStep = self.selectedSubStep ?? self.step.title
-        Section(header: Text("詳細設定")) {
+        VStack(alignment: .leading, spacing: 16) {
             if self.step.needsWeightInput {
-                TextField("量 (g)", text: self.$inputWeight)
+                Text("量 (g)")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                TextField("例: 200", text: self.$inputWeight)
                     .keyboardType(.decimalPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
             if self.step.needsTimeInput {
-                TextField("時間 (秒)", text: self.$inputTime)
+                Text("時間 (秒)")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                TextField("例: 30", text: self.$inputTime)
                     .keyboardType(.numberPad)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
             }
-            Button("追加") {
-                var result = finalStep
-                if self.step.needsWeightInput, let w = Double(inputWeight), w > 0 {
-                    result += " 量:\(w)g"
+            Button(
+                action: {
+                    var result = finalStep
+                    if self.step.needsWeightInput, let w = Int(inputWeight), w > 0 {
+                        result += "\(w)g"
+                    }
+                    if self.step.needsTimeInput, let t = Int(inputTime), t > 0 {
+                        result += "\(t)s"
+                    }
+                    self.onAdd(result)
+                    self.inputWeight = ""
+                    self.inputTime = ""
+                },
+                label: {
+                    Text("追加")
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical)
+                        .background(self.canAddStep ? Color("DarkBrown") : Color("DarkBrown").opacity(0.3))
+                        .cornerRadius(8)
                 }
-                if self.step.needsTimeInput, let t = Int(inputTime), t > 0 {
-                    result += " 時間:\(t)s"
-                }
-                self.onAdd(result)
-            }
-            Button("← 戻る") {
-                self.onBack()
-            }
-            .foregroundColor(.blue)
+            )
+            .contentShape(Rectangle())
+            .disabled(!self.canAddStep)
         }
+        .padding()
     }
 }
 
 private struct SelectableCardList: View {
-    let title: String?
     let items: [String]
     let onSelect: (String) -> Void
-    let backButtonTitle: String?
-    let onBack: (() -> Void)?
 
     var body: some View {
         VStack(alignment: .leading) {
-            if let title {
-                Text(title)
-                    .font(.headline)
-                    .padding(.leading)
-                    .padding(.top)
-            }
             ScrollView {
                 LazyVGrid(columns: [GridItem(.flexible())], spacing: 16) {
                     ForEach(self.items, id: \.self) { item in
@@ -167,15 +257,14 @@ private struct SelectableCardList: View {
                             self.onSelect(item)
                         } label: {
                             HStack(spacing: 12) {
-                                Text(item)
-                                    .font(.body)
-                                    .foregroundColor(.primary)
-                                Spacer()
                                 Image(systemName: "drop.fill")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .foregroundColor(.green)
+                                Text(item)
+                                    .font(.body)
+                                    .foregroundColor(.primary)
                             }
                             .padding()
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -184,13 +273,6 @@ private struct SelectableCardList: View {
                         }
                     }
                 }
-                .padding()
-            }
-            if let backButtonTitle, let onBack {
-                Button(backButtonTitle) {
-                    onBack()
-                }
-                .foregroundColor(.blue)
                 .padding()
             }
         }

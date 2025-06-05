@@ -3,30 +3,36 @@ import SwiftUI
 
 struct CreateBrewMethodStepFlow: View {
     @ObserveInjection var inject
-    @Binding var steps: [String]
+    @Binding var steps: [BrewStep]
     @State private var showSheet = false
-    @State private var draggedItem: String?
+    @State private var draggedItem: BrewStep?
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text("ドリップの流れを追加")
-                .font(.title)
-                .bold()
+        ZStack {
+            VStack(alignment: .leading, spacing: 16) {
+                Text("ドリップの流れを追加")
+                    .font(.title)
+                    .bold()
+                CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
+            }
+            .padding([.top, .leading])
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
 
-            CreateBrewMethodStepList(steps: self.$steps, draggedItem: self.$draggedItem)
-
-            Spacer()
-
-            CreateBrewMethodStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
+            VStack {
+                Spacer()
+                HStack {
+                    Spacer()
+                    CreateBrewMethodStepAddButton(steps: self.$steps, showSheet: self.$showSheet)
+                }
+            }
         }
-        .padding()
         .enableInjection()
     }
 }
 
 private struct CreateBrewMethodStepList: View {
-    @Binding var steps: [String]
-    @Binding var draggedItem: String?
+    @Binding var steps: [BrewStep]
+    @Binding var draggedItem: BrewStep?
 
     var body: some View {
         if self.steps.isEmpty {
@@ -35,48 +41,55 @@ private struct CreateBrewMethodStepList: View {
         } else {
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 8) {
-                    ForEach(self.steps, id: \.self) { step in
+                    ForEach(self.steps) { step in
                         HStack(spacing: 12) {
                             Image(systemName: "drop.fill")
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 24, height: 24)
-                                .foregroundColor(.green)
-
-                            Text(step)
-                                .font(.body)
-                                .foregroundColor(Color.primary)
-
+                                .foregroundColor(Color("DeepGreen"))
+                            BrewStepInfoView(step: step)
                             Spacer()
+                            Button(action: {
+                                if let idx = self.steps.firstIndex(where: { $0.id == step.id }) {
+                                    self.steps.remove(at: idx)
+                                }
+                            }, label: {
+                                Image(systemName: "trash")
+                                    .foregroundColor(Color.primary)
+                            })
+                            .buttonStyle(.plain)
                         }
-                        .padding()
-                        .frame(maxWidth: .infinity)
+                        .frame(height: 56)
+                        .padding(.vertical, 4)
+                        .padding(.horizontal)
                         .background(Color.white)
-                        .cornerRadius(12)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color("DarkBrown"), lineWidth: 3)
+                        )
+                        .cornerRadius(10)
                         .shadow(radius: 2)
                         .onDrag {
                             self.draggedItem = step
-                            return NSItemProvider(object: step as NSString)
+                            return NSItemProvider(object: NSString(string: step.id.uuidString))
                         }
                         .onDrop(
                             of: [.text],
-                            delegate: StepDropDelegate(
-                                item: step,
-                                steps: self.$steps,
-                                draggedItem: self.$draggedItem
-                            )
+                            delegate: StepDropDelegate(item: step, steps: self.$steps, draggedItem: self.$draggedItem)
                         )
                     }
                 }
+                .padding(.trailing, 12)
             }
         }
     }
 }
 
 struct StepDropDelegate: DropDelegate {
-    let item: String
-    @Binding var steps: [String]
-    @Binding var draggedItem: String?
+    let item: BrewStep
+    @Binding var steps: [BrewStep]
+    @Binding var draggedItem: BrewStep?
 
     func performDrop(info _: DropInfo) -> Bool {
         self.draggedItem = nil
@@ -98,7 +111,7 @@ struct StepDropDelegate: DropDelegate {
 }
 
 private struct CreateBrewMethodStepAddButton: View {
-    @Binding var steps: [String]
+    @Binding var steps: [BrewStep]
     @Binding var showSheet: Bool
 
     var body: some View {
@@ -120,6 +133,29 @@ private struct CreateBrewMethodStepAddButton: View {
                 CreateBrewMethodStepSelectionSheet { selectedStep in
                     self.steps.append(selectedStep)
                     self.showSheet = false
+                }
+            }
+        }
+    }
+}
+
+private struct BrewStepInfoView: View {
+    let step: BrewStep
+    var body: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(self.step.title)
+                .font(.body)
+                .foregroundColor(Color.primary)
+            HStack(spacing: 8) {
+                if let w = step.weight {
+                    Text("\(w)g")
+                        .font(.body)
+                        .foregroundColor(Color("DeepGreen"))
+                }
+                if let t = step.time {
+                    Text("\(t)s")
+                        .font(.body)
+                        .foregroundColor(Color("DeepGreen"))
                 }
             }
         }
