@@ -10,7 +10,6 @@ struct BrewMethodListView: View {
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
-        Color("DarkBrown"),
         Color("DarkBrown")
     ]
 
