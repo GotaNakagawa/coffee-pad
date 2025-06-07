@@ -5,6 +5,7 @@ struct BrewMethodRow: View {
     @ObserveInjection var inject
     let method: BrewMethod
     let color: Color
+    let onDelete: (Int) -> Void
     @State private var showingActionSheet = false
 
     var body: some View {
@@ -38,7 +39,7 @@ struct BrewMethodRow: View {
         }
         .frame(maxWidth: .infinity)
         .sheet(isPresented: self.$showingActionSheet) {
-            BrewMethodActionSheet(method: self.method)
+            BrewMethodActionSheet(method: self.method, onDelete: self.onDelete)
         }
         .enableInjection()
     }
@@ -102,6 +103,7 @@ private struct BrewMethodDetails: View {
 
 struct BrewMethodActionSheet: View {
     let method: BrewMethod
+    let onDelete: (Int) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var contentHeight: CGFloat = 200
 
@@ -196,6 +198,7 @@ struct BrewMethodActionSheet: View {
 
     private func deleteBrewMethod() {
         print("削除が選択されました")
+        self.onDelete(self.method.id)
         self.dismiss()
     }
 }
