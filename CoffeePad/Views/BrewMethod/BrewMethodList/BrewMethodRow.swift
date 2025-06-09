@@ -9,35 +9,41 @@ struct BrewMethodRow: View {
     @State private var showingActionSheet = false
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 20)
-                .fill(self.color)
-                .shadow(radius: 4)
+        NavigationLink(destination: BrewMethodDetailView(method: self.method)) {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(self.color)
+                    .shadow(radius: 4)
 
-            VStack(spacing: 0) {
-                BrewMethodDetails(method: self.method)
+                VStack(spacing: 0) {
+                    BrewMethodDetails(method: self.method)
 
-                HStack {
-                    Text(self.method.date)
-                        .font(.footnote)
-                        .bold()
-                        .foregroundColor(.white)
-                    Spacer()
-                    Button(action: {
-                        self.showingActionSheet = true
-                    }, label: {
-                        HStack(spacing: 4) {
-                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                            Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
-                        }
-                    })
+                    HStack {
+                        Text(self.method.date)
+                            .font(.footnote)
+                            .bold()
+                            .foregroundColor(.white)
+                        Spacer()
+                        Button(action: {
+                            self.showingActionSheet = true
+                        }, label: {
+                            HStack(spacing: 4) {
+                                Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                                Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                                Circle().frame(width: 4, height: 4).foregroundColor(.white.opacity(0.8))
+                            }
+                            .padding(8)
+                        })
+                    }
+                    .padding(.vertical, 16)
+                    .padding(.leading, 16)
+                    .padding(.trailing, 8)
+                    .frame(maxWidth: .infinity)
                 }
-                .padding()
-                .frame(maxWidth: .infinity)
             }
+            .frame(maxWidth: .infinity)
         }
-        .frame(maxWidth: .infinity)
+        .buttonStyle(PlainButtonStyle())
         .sheet(isPresented: self.$showingActionSheet) {
             BrewMethodActionSheet(method: self.method, onDelete: self.onDelete)
         }
