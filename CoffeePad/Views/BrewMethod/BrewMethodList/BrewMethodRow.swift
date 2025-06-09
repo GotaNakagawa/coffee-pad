@@ -60,7 +60,7 @@ private struct BrewMethodDetails: View {
             Text(self.method.title)
                 .font(.headline)
 
-            Text(self.method.comment)
+            Text(self.method.comment.components(separatedBy: .newlines).first ?? "")
                 .font(.caption)
                 .foregroundColor(.gray)
 
