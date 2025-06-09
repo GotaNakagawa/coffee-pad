@@ -69,7 +69,7 @@ struct CreateBrewMethodStepContent: View {
             BrewMethodConfirmView(
                 methodName: self.methodName,
                 grindSize: self.grindSize,
-                grindMemo: nil,
+                grindMemo: self.comment,
                 coffeeAmount: self.coffeeAmount,
                 coffeeVolume: self.coffeeVolume,
                 waterTemp: self.waterTemp,
