@@ -29,6 +29,8 @@ struct CreateBrewMethodView: View {
             Int(self.waterTemp) != nil
         case .brewSteps:
             !self.brewSteps.isEmpty
+        case .coffeeVolume:
+            Int(self.coffeeVolume) != nil
         default:
             true
         }
