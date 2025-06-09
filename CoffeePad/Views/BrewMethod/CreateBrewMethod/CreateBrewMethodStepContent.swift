@@ -59,11 +59,11 @@ struct CreateBrewMethodStepContent: View {
                 keyboardType: .numberPad
             )
         case .comment:
-            CreateBrewMethodStepTextField(
+            CreateBrewMethodStepTextEditor(
                 title: "コメント",
                 description: "メソッドに関するコメントやメモを入力してください",
                 text: self.$comment,
-                placeholder: "例: このレシピは初心者向けです"
+                placeholder: "例: このレシピは初心者向けです\n\n味の特徴:\nまろやかで酸味が少なく、苦味も控えめ。朝のコーヒーに最適です。"
             )
         case .confirm:
             BrewMethodConfirmView(
