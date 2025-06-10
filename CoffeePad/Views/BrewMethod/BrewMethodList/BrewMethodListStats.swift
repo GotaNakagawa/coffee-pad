@@ -1,6 +1,8 @@
+import Inject
 import SwiftUI
 
 struct BrewMethodListStats: View {
+    @ObserveInjection var inject
     let methods: [BrewMethod]
 
     var totalCount: Int {
@@ -38,5 +40,6 @@ struct BrewMethodListStats: View {
                 Text("総作成数").font(.caption).foregroundColor(.gray)
             }
         }
+        .enableInjection()
     }
 }

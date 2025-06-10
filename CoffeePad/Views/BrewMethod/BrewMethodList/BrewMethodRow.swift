@@ -1,6 +1,8 @@
+import Inject
 import SwiftUI
 
 struct BrewMethodRow: View {
+    @ObserveInjection var inject
     let method: BrewMethod
     let color: Color
 
@@ -30,10 +32,12 @@ struct BrewMethodRow: View {
             }
         }
         .frame(maxWidth: .infinity)
+        .enableInjection()
     }
 }
 
 private struct BrewMethodDetails: View {
+    @ObserveInjection var inject
     let method: BrewMethod
 
     var body: some View {
@@ -84,5 +88,6 @@ private struct BrewMethodDetails: View {
         .padding(.horizontal, 8)
         .padding(.top, 8)
         .padding(.bottom, 8)
+        .enableInjection()
     }
 }

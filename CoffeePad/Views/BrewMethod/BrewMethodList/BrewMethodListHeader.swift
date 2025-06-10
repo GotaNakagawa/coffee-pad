@@ -1,6 +1,8 @@
+import Inject
 import SwiftUI
 
 struct BrewMethodListHeader: View {
+    @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
 
     var body: some View {
@@ -22,5 +24,6 @@ struct BrewMethodListHeader: View {
             alignment: .leading
         )
         .padding(.top, 16)
+        .enableInjection()
     }
 }

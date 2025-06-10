@@ -14,6 +14,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Hot Reloading
 - **InjectionIII**: Configured for rapid development iteration. Use `#if DEBUG` wrapped `Inject.ViewControllerHost()` calls for hot reloading
+- **CRITICAL**: All new SwiftUI View components MUST include hot reload support
 
 ## Architecture Overview
 
@@ -52,6 +53,7 @@ HomeView (root)
 - `@Environment(\.dismiss)` for modal dismissal
 - Progressive disclosure in multi-step forms
 - Custom modifiers for consistent styling
+- **MANDATORY: All SwiftUI View components MUST include hot reload support**
 
 ### Code Organization
 - Feature-based folder structure (`Views/BrewMethod/`, `Views/Home/`)
@@ -77,3 +79,26 @@ HomeView (root)
 - Disabled some restrictive rules for SwiftUI development
 - Enabled many opt-in rules for code quality
 - Excludes build artifacts and dependencies
+
+## Component Creation Rules
+
+### Required Hot Reload Pattern for ALL SwiftUI Views
+
+When creating any new SwiftUI View component, Claude MUST always include the following pattern:
+
+```swift
+import Inject
+import SwiftUI
+
+struct YourComponent: View {
+    @ObserveInjection var inject
+    // ... other properties
+    
+    var body: some View {
+        // ... your view content
+        .enableInjection()
+    }
+}
+```
+
+**This is MANDATORY for ALL SwiftUI View structs. No exceptions.**
