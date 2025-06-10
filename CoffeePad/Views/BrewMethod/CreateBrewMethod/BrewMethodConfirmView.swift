@@ -5,7 +5,7 @@ struct BrewMethodConfirmView: View {
     @ObserveInjection var inject
     let methodName: String
     let grindSize: String
-    let grindMemo: String?
+    let grindMemo: String
     let coffeeAmount: String
     let coffeeVolume: String
     let waterTemp: String
@@ -58,6 +58,11 @@ struct BrewMethodConfirmView: View {
                 ForEach(self.steps) { step in
                     BrewStepConfirmRow(step: step)
                 }
+
+                Text("コメント")
+                    .font(.headline)
+                    .padding(.top, 8)
+                Text(self.grindMemo)
             }
             .padding()
         }
