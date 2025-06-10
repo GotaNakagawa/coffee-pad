@@ -1,6 +1,8 @@
+import Inject
 import SwiftUI
 
 struct MenuButton: View {
+    @ObserveInjection var inject
     let title: String
     let imageName: String
     let backgroundColor: Color
@@ -23,5 +25,6 @@ struct MenuButton: View {
                 .font(.caption)
                 .foregroundColor(.primary)
         }
+        .enableInjection()
     }
 }

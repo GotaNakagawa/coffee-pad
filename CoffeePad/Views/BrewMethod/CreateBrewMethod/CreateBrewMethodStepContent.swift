@@ -1,3 +1,4 @@
+import Inject
 import SwiftUI
 
 enum BrewStepType: Int, CaseIterable {
@@ -5,6 +6,7 @@ enum BrewStepType: Int, CaseIterable {
 }
 
 struct CreateBrewMethodStepContent: View {
+    @ObserveInjection var inject
     static let stepCount = BrewStepType.allCases.count
     let currentStep: BrewStepType
     @Binding var methodName: String
@@ -76,5 +78,6 @@ struct CreateBrewMethodStepContent: View {
                 steps: self.brewSteps
             )
         }
+        .enableInjection()
     }
 }
