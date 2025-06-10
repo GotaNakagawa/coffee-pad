@@ -22,6 +22,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **AUTO-FIX**: When errors are detected, Claude MUST automatically fix them before proceeding
 - **VALIDATION**: After fixes, re-run diagnostics to ensure errors are resolved
 
+### Branch Management
+- **AUTO-DELETE**: Configure GitHub to automatically delete head branches after PR merge
+- **LOCAL CLEANUP**: Run `git branch -d <branch-name>` after successful PR merge
+- **REMOTE CLEANUP**: Use `git remote prune origin` to remove stale remote references
+
 ## Architecture Overview
 
 **CoffeePad** is a SwiftUI-based iOS app for managing coffee brewing methods and recipes.
@@ -171,3 +176,56 @@ When Xcode errors are detected:
 3. **Fix**: Apply appropriate solution pattern
 4. **Verify**: Confirm fix resolves the specific error
 5. **Test**: Ensure fix doesn't introduce new errors
+
+## Branch Cleanup Workflow
+
+### GitHub Repository Settings
+To enable automatic branch deletion after PR merge:
+1. Go to repository Settings → General → Pull Requests
+2. Check "Automatically delete head branches"
+3. This removes the feature branch from GitHub after merge
+
+### Local Branch Cleanup Commands
+After a PR is merged, clean up local branches:
+
+```bash
+# Switch to main and pull latest changes
+git checkout main
+git pull origin main
+
+# Delete merged local branch
+git branch -d <feature-branch-name>
+
+# Remove stale remote branch references
+git remote prune origin
+
+# Alternative: Delete both local and remote tracking
+git branch -D <feature-branch-name>
+git push origin --delete <feature-branch-name>
+```
+
+### Automated Cleanup Script
+Add to your shell profile for convenience:
+
+```bash
+# Function to clean up after PR merge
+cleanup_branch() {
+    if [ -z "$1" ]; then
+        echo "Usage: cleanup_branch <branch-name>"
+        return 1
+    fi
+    
+    git checkout main
+    git pull origin main
+    git branch -d "$1"
+    git remote prune origin
+    echo "✅ Cleaned up branch: $1"
+}
+```
+
+### Claude Workflow
+When Claude learns a PR has been merged:
+1. **Switch to main**: `git checkout main`
+2. **Pull latest**: `git pull origin main`
+3. **Delete local branch**: `git branch -d <branch-name>`
+4. **Clean remote refs**: `git remote prune origin`
