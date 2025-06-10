@@ -10,7 +10,6 @@ struct BrewMethodListView: View {
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
-        Color("DarkBrown"),
         Color("DarkBrown")
     ]
 
@@ -27,7 +26,12 @@ struct BrewMethodListView: View {
                     VStack(spacing: 16) {
                         ForEach(Array(self.methods.enumerated()), id: \.1.id) { index, method in
                             let color = self.colors[index % self.colors.count]
-                            BrewMethodRow(method: method, color: color)
+                            BrewMethodRow(
+                                method: method,
+                                color: color
+                            ) { methodId in
+                                self.deleteMethod(id: methodId)
+                            }
                         }
                     }
                 }
@@ -52,6 +56,14 @@ struct BrewMethodListView: View {
                let saved = try? JSONDecoder().decode([BrewMethod].self, from: data) {
                 self.methods = saved
             }
+        }
+    }
+
+    private func deleteMethod(id: Int) {
+        self.methods.removeAll { $0.id == id }
+
+        if let encoded = try? JSONEncoder().encode(self.methods) {
+            UserDefaults.standard.set(encoded, forKey: "brewMethods")
         }
     }
 }
