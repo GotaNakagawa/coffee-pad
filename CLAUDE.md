@@ -16,6 +16,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **InjectionIII**: Configured for rapid development iteration. Use `#if DEBUG` wrapped `Inject.ViewControllerHost()` calls for hot reloading
 - **CRITICAL**: All new SwiftUI View components MUST include hot reload support
 
+### Error Detection and Correction
+- **MANDATORY**: Always check for Xcode errors before committing using `mcp__ide__getDiagnostics`
+- **SwiftLint REQUIRED**: Run `swiftlint --config .swiftlint.yml` to detect linting violations
+- **AUTO-FIX**: When errors are detected, Claude MUST automatically fix them before proceeding
+- **VALIDATION**: After fixes, re-run diagnostics to ensure errors are resolved
+
 ## Architecture Overview
 
 **CoffeePad** is a SwiftUI-based iOS app for managing coffee brewing methods and recipes.
@@ -102,3 +108,66 @@ struct YourComponent: View {
 ```
 
 **This is MANDATORY for ALL SwiftUI View structs. No exceptions.**
+
+## Development Workflow Rules
+
+### Before Every Commit
+Claude MUST perform these steps in order:
+
+1. **Error Detection**: Run `mcp__ide__getDiagnostics` to check for Swift/Xcode errors
+2. **Error Resolution**: If errors are found, fix them immediately:
+   - Syntax errors: Correct Swift syntax issues
+   - Type errors: Fix type mismatches and missing imports
+   - SwiftUI errors: Resolve view structure and modifier issues
+   - Build errors: Address compilation problems
+3. **Validation**: Re-run `mcp__ide__getDiagnostics` to confirm all errors are resolved
+4. **Commit**: Only proceed with commit after zero errors confirmed
+
+### Common Swift Error Patterns and Solutions
+
+#### SwiftUI View Modifier Issues
+```swift
+// WRONG: Cannot apply modifiers to switch statements
+switch condition {
+    case .a: ViewA()
+    case .b: ViewB()
+}
+.someModifier()
+
+// CORRECT: Wrap in Group
+Group {
+    switch condition {
+        case .a: ViewA()
+        case .b: ViewB()
+    }
+}
+.someModifier()
+```
+
+#### Hot Reload Integration Issues
+```swift
+// WRONG: Missing inject imports/properties
+struct MyView: View {
+    var body: some View { Text("Hello") }
+}
+
+// CORRECT: Complete hot reload setup
+import Inject
+import SwiftUI
+
+struct MyView: View {
+    @ObserveInjection var inject
+    var body: some View {
+        Text("Hello")
+            .enableInjection()
+    }
+}
+```
+
+### Error Handling Protocol
+When Xcode errors are detected:
+1. **Identify**: Parse error message and location
+2. **Categorize**: Determine error type (syntax, type, SwiftUI, build)
+3. **Fix**: Apply appropriate solution pattern
+4. **Verify**: Confirm fix resolves the specific error
+5. **Test**: Ensure fix doesn't introduce new errors
