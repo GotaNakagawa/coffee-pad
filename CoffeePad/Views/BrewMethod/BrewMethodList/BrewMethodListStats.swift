@@ -12,7 +12,7 @@ struct BrewMethodListStats: View {
     var thisMonthCount: Int {
         let calendar = Calendar.current
         let now = Date()
-        return self.methods.count(where: { method in
+        return self.methods.count { method in
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
@@ -20,7 +20,7 @@ struct BrewMethodListStats: View {
                 return calendar.isDate(methodDate, equalTo: now, toGranularity: .month)
             }
             return false
-        })
+        }
     }
 
     var body: some View {
