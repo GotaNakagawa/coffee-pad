@@ -108,6 +108,7 @@ private struct BrewMethodDetails: View {
 }
 
 struct BrewMethodActionSheet: View {
+    @ObserveInjection var inject
     let method: BrewMethod
     let onDelete: (Int) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -115,54 +116,86 @@ struct BrewMethodActionSheet: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            RoundedRectangle(cornerRadius: 4)
-                .fill(Color.gray.opacity(0.3))
-                .frame(width: 40, height: 4)
-                .padding(.top, 8)
-                .padding(.bottom, 8)
+            self.dragIndicator
+            self.actionButtonsSection
+            self.deleteButtonSection
+        }
+        .background(Color(.systemBackground))
+        .cornerRadius(40)
+        .background(self.geometryBackground)
+        .presentationDetents([.height(self.contentHeight)])
+        .presentationDragIndicator(.hidden)
+        .enableInjection()
+    }
 
-            HStack(spacing: 12) {
-                Button(action: {
-                    self.shareBrewMethod()
-                }, label: {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.gray.opacity(0.15))
-                        .frame(height: 80)
-                        .overlay {
-                            VStack(spacing: 4) {
-                                Image(systemName: "square.and.arrow.up")
-                                    .font(.title3)
-                                    .foregroundColor(.black)
-                                Text("共有")
-                                    .font(.caption)
-                                    .foregroundColor(.black)
-                            }
-                        }
-                })
+    private var dragIndicator: some View {
+        RoundedRectangle(cornerRadius: 4)
+            .fill(Color.gray.opacity(0.3))
+            .frame(width: 40, height: 4)
+            .padding(.top, 8)
+            .padding(.bottom, 8)
+    }
 
-                Button(action: {
-                    self.saveBrewMethod()
-                }, label: {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.gray.opacity(0.15))
-                        .frame(height: 80)
-                        .overlay {
-                            VStack(spacing: 4) {
-                                Image(systemName: "square.and.arrow.down")
-                                    .font(.title3)
-                                    .foregroundColor(.black)
-                                Text("保存")
-                                    .font(.caption)
-                                    .foregroundColor(.black)
-                            }
+    private var actionButtonsSection: some View {
+        HStack(spacing: 12) {
+            self.shareButton
+            self.saveButton
+        }
+        .padding(20)
+    }
+
+    private var shareButton: some View {
+        Button(
+            action: {
+                self.shareBrewMethod()
+            },
+            label: {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(height: 80)
+                    .overlay {
+                        VStack(spacing: 4) {
+                            Image(systemName: "square.and.arrow.up")
+                                .font(.title3)
+                                .foregroundColor(.black)
+                            Text("共有")
+                                .font(.caption)
+                                .foregroundColor(.black)
                         }
-                })
+                    }
             }
-            .padding(20)
+        )
+    }
 
-            Button(action: {
+    private var saveButton: some View {
+        Button(
+            action: {
+                self.saveBrewMethod()
+            },
+            label: {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.gray.opacity(0.15))
+                    .frame(height: 80)
+                    .overlay {
+                        VStack(spacing: 4) {
+                            Image(systemName: "square.and.arrow.down")
+                                .font(.title3)
+                                .foregroundColor(.black)
+                            Text("保存")
+                                .font(.caption)
+                                .foregroundColor(.black)
+                        }
+                    }
+            }
+        )
+    }
+
+    private var deleteButtonSection: some View {
+        Button(
+            action: {
                 self.deleteBrewMethod()
-            }, label: {
+            },
+            label: {
                 HStack {
                     Image(systemName: "trash")
                         .foregroundColor(.red)
@@ -174,22 +207,19 @@ struct BrewMethodActionSheet: View {
                 .padding()
                 .background(Color.gray.opacity(0.15))
                 .cornerRadius(12)
-            })
-            .padding(.horizontal, 20)
-            .padding(.bottom, 20)
-        }
-        .background(Color(.systemBackground))
-        .cornerRadius(40)
-        .background(
-            GeometryReader { geometry in
-                Color.clear
-                    .onAppear {
-                        self.contentHeight = geometry.size.height
-                    }
             }
         )
-        .presentationDetents([.height(self.contentHeight)])
-        .presentationDragIndicator(.hidden)
+        .padding(.horizontal, 20)
+        .padding(.bottom, 20)
+    }
+
+    private var geometryBackground: some View {
+        GeometryReader { geometry in
+            Color.clear
+                .onAppear {
+                    self.contentHeight = geometry.size.height
+                }
+        }
     }
 
     private func shareBrewMethod() {
