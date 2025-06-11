@@ -55,9 +55,21 @@ struct BrewMethodDetailView: View {
                 .aspectRatio(1, contentMode: .fit)
                 .frame(width: 250, height: 250)
                 .overlay(
-                    Text("RWS")
-                        .font(.system(size: 48, weight: .bold))
-                        .foregroundColor(.white)
+                    Group {
+                        if let iconData = self.method.iconData,
+                           let uiImage = UIImage(data: iconData) {
+                            Image(uiImage: uiImage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 250, height: 250)
+                                .clipped()
+                                .cornerRadius(12)
+                        } else {
+                            Text("RWS")
+                                .font(.system(size: 48, weight: .bold))
+                                .foregroundColor(.white)
+                        }
+                    }
                 )
             Spacer()
         }

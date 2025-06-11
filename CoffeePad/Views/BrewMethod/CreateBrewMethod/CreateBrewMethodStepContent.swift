@@ -2,7 +2,7 @@ import Inject
 import SwiftUI
 
 enum BrewStepType: Int, CaseIterable {
-    case methodName, grindSize, coffeeAmount, waterTemp, brewSteps, coffeeVolume, comment, confirm
+    case methodName, grindSize, coffeeAmount, waterTemp, brewSteps, coffeeVolume, comment, iconSelection, confirm
 }
 
 struct CreateBrewMethodStepContent: View {
@@ -10,6 +10,7 @@ struct CreateBrewMethodStepContent: View {
     static let stepCount = BrewStepType.allCases.count
     let currentStep: BrewStepType
     @Binding var methodName: String
+    @Binding var selectedIconData: Data?
     @Binding var grindSize: String
     @Binding var coffeeAmount: String
     @Binding var waterTemp: String
@@ -72,6 +73,12 @@ struct CreateBrewMethodStepContent: View {
                 description: "メソッドに関するコメントやメモを入力してください",
                 text: self.$comment,
                 placeholder: "例: このレシピは初心者向けです\n\n味の特徴:\nまろやかで酸味が少なく、苦味も控えめ。朝のコーヒーに最適です。"
+            )
+        case .iconSelection:
+            CreateBrewMethodIconSelection(
+                title: "メソッドアイコンを選択",
+                description: "メソッドを表す写真を選んでください",
+                selectedIconData: self.$selectedIconData
             )
         case .confirm:
             BrewMethodConfirmView(

@@ -14,6 +14,7 @@ struct CreateBrewMethodView: View {
     @State private var coffeeVolume: String = ""
     @State private var brewSteps: [BrewStep] = []
     @State private var comment: String = ""
+    @State private var selectedIconData: Data?
 
     let grindOptions = ["極細挽き", "細挽き", "中粗挽き", "中挽き", "中細挽き", "粗挽き", "極粗挽き"]
 
@@ -31,6 +32,8 @@ struct CreateBrewMethodView: View {
             !self.brewSteps.isEmpty
         case .coffeeVolume:
             Int(self.coffeeVolume) != nil
+        case .iconSelection:
+            true
         default:
             true
         }
@@ -72,6 +75,7 @@ struct CreateBrewMethodView: View {
         CreateBrewMethodStepContent(
             currentStep: self.currentStep,
             methodName: self.$methodName,
+            selectedIconData: self.$selectedIconData,
             grindSize: self.$grindSize,
             coffeeAmount: self.$coffeeAmount,
             waterTemp: self.$waterTemp,
@@ -125,7 +129,8 @@ struct CreateBrewMethodView: View {
             temp: Int(self.waterTemp) ?? 0,
             weight: Int(self.coffeeAmount) ?? 0,
             date: DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .none),
-            steps: self.brewSteps
+            steps: self.brewSteps,
+            iconData: self.selectedIconData
         )
         var methods: [BrewMethod] = []
         if let data = UserDefaults.standard.data(forKey: "brewMethods"),
