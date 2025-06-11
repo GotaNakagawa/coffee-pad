@@ -120,11 +120,12 @@ struct CreateBrewMethodView: View {
             id: Int(Date().timeIntervalSince1970),
             title: self.methodName,
             comment: self.comment,
-            amount: Int(self.coffeeAmount) ?? 0,
+            amount: Int(self.coffeeVolume) ?? 0,
             grind: self.grindSize,
             temp: Int(self.waterTemp) ?? 0,
-            weight: self.brewSteps.reduce(0) { $0 + ($1.weight ?? 0) },
-            date: DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .none)
+            weight: Int(self.coffeeAmount) ?? 0,
+            date: DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .none),
+            steps: self.brewSteps
         )
         var methods: [BrewMethod] = []
         if let data = UserDefaults.standard.data(forKey: "brewMethods"),

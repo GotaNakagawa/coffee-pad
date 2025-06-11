@@ -7,4 +7,5 @@ struct BrewMethod: Identifiable, Codable {
     let temp: Int
     let weight: Int
     let date: String
+    let steps: [BrewStep]
 }

@@ -130,6 +130,9 @@ struct BrewMethodDetailView: View {
         var body: some View {
             VStack(alignment: .leading, spacing: 20) {
                 PrerequisitesSection(method: self.method)
+                if !self.method.steps.isEmpty {
+                    StepsSection(steps: self.method.steps)
+                }
                 if !self.method.comment.isEmpty {
                     CommentSection(comment: self.method.comment)
                 }
@@ -140,12 +143,15 @@ struct BrewMethodDetailView: View {
     private struct PrerequisitesSection: View {
         let method: BrewMethod
 
+        private var totalTime: String {
+            let totalSeconds = self.method.steps.compactMap(\.time).reduce(0, +)
+            let minutes = totalSeconds / 60
+            let seconds = totalSeconds % 60
+            return String(format: "%02d:%02d", minutes, seconds)
+        }
+
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                Text("前提条件")
-                    .font(.headline)
-                    .padding(.leading, 20)
-
                 VStack(spacing: 0) {
                     DetailRowView(
                         imageName: "groundCoffeeIcon",
@@ -181,8 +187,39 @@ struct BrewMethodDetailView: View {
                         memo: nil,
                         imageIsSystem: false,
                         isFirst: false,
+                        isLast: false
+                    )
+                    DetailRowView(
+                        imageName: "timerIcon",
+                        label: "抽出時間",
+                        value: self.totalTime,
+                        memo: nil,
+                        imageIsSystem: false,
+                        isFirst: false,
                         isLast: true
                     )
+                }
+                .background(Color(.systemGray6))
+                .cornerRadius(10)
+                .padding(.horizontal, 20)
+            }
+        }
+    }
+
+    private struct StepsSection: View {
+        let steps: [BrewStep]
+
+        var body: some View {
+            VStack(alignment: .leading, spacing: 12) {
+                VStack(spacing: 0) {
+                    ForEach(Array(self.steps.enumerated()), id: \.element.id) { index, step in
+                        StepRowView(
+                            step: step,
+                            stepNumber: index + 1,
+                            isFirst: index == 0,
+                            isLast: index == self.steps.count - 1
+                        )
+                    }
                 }
                 .background(Color(.systemGray6))
                 .cornerRadius(10)
@@ -196,10 +233,6 @@ struct BrewMethodDetailView: View {
 
         var body: some View {
             VStack(alignment: .leading, spacing: 12) {
-                Text("コメント")
-                    .font(.headline)
-                    .padding(.leading, 20)
-
                 VStack(spacing: 0) {
                     CommentRowView(comment: self.comment)
                 }

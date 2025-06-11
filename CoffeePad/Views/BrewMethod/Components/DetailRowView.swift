@@ -81,13 +81,13 @@ struct StepRowView: View {
 
                 HStack(spacing: 8) {
                     if let time = step.time {
-                        Text(String(format: "%02d:%02d", time / 60, time % 60))
-                            .font(.caption)
+                        Text("\(time)秒")
+                            .font(.body)
                             .foregroundColor(.secondary)
                     }
                     if let weight = step.weight {
                         Text("\(weight)ml")
-                            .font(.caption)
+                            .font(.body)
                             .foregroundColor(.secondary)
                     }
                 }
