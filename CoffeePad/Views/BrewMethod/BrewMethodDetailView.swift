@@ -76,7 +76,7 @@ struct BrewMethodDetailView: View {
                                         .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                                 )
                         } else {
-                            Text("RWS")
+                            Text("No Image")
                                 .font(.system(size: 48, weight: .bold))
                                 .foregroundColor(.white)
                         }
