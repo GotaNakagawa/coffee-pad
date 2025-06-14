@@ -56,53 +56,58 @@ private struct BrewMethodDetails: View {
     let method: BrewMethod
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            Text(self.method.title)
-                .font(.headline)
-
-            Text(self.method.comment.components(separatedBy: .newlines).first ?? "")
-                .font(.caption)
-                .foregroundColor(.gray)
-
-            HStack(spacing: 16) {
-                HStack(spacing: 4) {
-                    Image("coffeeCupIcon")
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text("\(self.method.amount)ml")
-                }
-
-                HStack(spacing: 4) {
-                    Image("groundCoffeeIcon")
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text(self.method.grind)
-                }
-
-                HStack(spacing: 4) {
-                    Image("thermometerIcon")
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text("\(self.method.temp)℃")
-                }
-
-                HStack(spacing: 4) {
-                    Image("scaleIcon")
-                        .resizable()
-                        .frame(width: 16, height: 16)
-                    Text("\(self.method.weight)g")
-                }
+        HStack {
+            VStack {
+                BrewMethodIconView(iconData: self.method.iconData, size: 48, radius: 4)
+                Spacer()
             }
-            .font(.caption)
+
+            VStack(alignment: .leading) {
+                Text(self.method.title)
+                    .font(.headline)
+
+                Text(self.method.comment.components(separatedBy: .newlines).first ?? "")
+                    .font(.caption)
+                    .foregroundColor(.gray)
+
+                HStack(spacing: 16) {
+                    HStack(spacing: 4) {
+                        Image("coffeeCupIcon")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("\(self.method.amount)ml")
+                    }
+
+                    HStack(spacing: 4) {
+                        Image("groundCoffeeIcon")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text(self.method.grind)
+                    }
+
+                    HStack(spacing: 4) {
+                        Image("thermometerIcon")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("\(self.method.temp)℃")
+                    }
+
+                    HStack(spacing: 4) {
+                        Image("scaleIcon")
+                            .resizable()
+                            .frame(width: 16, height: 16)
+                        Text("\(self.method.weight)g")
+                    }
+                }
+                .font(.caption)
+            }
         }
         .padding()
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(Color.white)
         .cornerRadius(12)
         .shadow(radius: 1)
-        .padding(.horizontal, 8)
-        .padding(.top, 8)
-        .padding(.bottom, 8)
+        .padding(8)
         .enableInjection()
     }
 }

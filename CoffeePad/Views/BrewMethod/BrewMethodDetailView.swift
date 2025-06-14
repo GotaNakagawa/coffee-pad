@@ -53,35 +53,7 @@ struct BrewMethodDetailView: View {
     private var heroImageSection: some View {
         HStack {
             Spacer()
-            RoundedRectangle(cornerRadius: 12)
-                .fill(LinearGradient(
-                    gradient: Gradient(colors: [Color.blue.opacity(0.7), Color.cyan.opacity(0.5)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                ))
-                .aspectRatio(1, contentMode: .fit)
-                .frame(width: 250, height: 250)
-                .overlay(
-                    Group {
-                        if let iconData = self.method.iconData,
-                           let uiImage = UIImage(data: iconData) {
-                            Image(uiImage: uiImage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: 250, height: 250)
-                                .clipped()
-                                .cornerRadius(12)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                                )
-                        } else {
-                            Text("No Image")
-                                .font(.system(size: 48, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                    }
-                )
+            BrewMethodIconView(iconData: self.method.iconData, size: 250, radius: 12)
             Spacer()
         }
     }
