@@ -16,7 +16,15 @@ struct CreateBrewMethodView: View {
     @State private var comment: String = ""
     @State private var selectedIconData: Data?
 
+    private let editingMethod: BrewMethod?
+    private let isEditMode: Bool
+
     let grindOptions = ["極細挽き", "細挽き", "中粗挽き", "中挽き", "中細挽き", "粗挽き", "極粗挽き"]
+
+    init(editingMethod: BrewMethod? = nil) {
+        self.editingMethod = editingMethod
+        self.isEditMode = editingMethod != nil
+    }
 
     var canProceedToNextStep: Bool {
         switch self.currentStep {
@@ -48,6 +56,11 @@ struct CreateBrewMethodView: View {
             self.actionButton
         }
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            if let method = self.editingMethod {
+                self.loadEditingData(from: method)
+            }
+        }
         .enableInjection()
     }
 
@@ -119,7 +132,27 @@ struct CreateBrewMethodView: View {
         }
     }
 
+    private func loadEditingData(from method: BrewMethod) {
+        self.methodName = method.title
+        self.grindSize = method.grind
+        self.coffeeAmount = String(method.weight)
+        self.waterTemp = String(method.temp)
+        self.coffeeVolume = String(method.amount)
+        self.brewSteps = method.steps
+        self.comment = method.comment
+        self.selectedIconData = method.iconData
+    }
+
     private func saveBrewMethod() {
+        if self.isEditMode {
+            self.updateExistingMethod()
+        } else {
+            self.createNewMethod()
+        }
+        self.dismiss()
+    }
+
+    private func createNewMethod() {
         let newMethod = BrewMethod(
             id: Int(Date().timeIntervalSince1970),
             title: self.methodName,
@@ -141,6 +174,38 @@ struct CreateBrewMethodView: View {
         if let data = try? JSONEncoder().encode(methods) {
             UserDefaults.standard.set(data, forKey: "brewMethods")
         }
-        self.dismiss()
+    }
+
+    private func updateExistingMethod() {
+        guard let editingMethod = self.editingMethod else {
+            return
+        }
+
+        let updatedMethod = BrewMethod(
+            id: editingMethod.id,
+            title: self.methodName,
+            comment: self.comment,
+            amount: Int(self.coffeeVolume) ?? 0,
+            grind: self.grindSize,
+            temp: Int(self.waterTemp) ?? 0,
+            weight: Int(self.coffeeAmount) ?? 0,
+            date: editingMethod.date,
+            steps: self.brewSteps,
+            iconData: self.selectedIconData
+        )
+
+        var methods: [BrewMethod] = []
+        if let data = UserDefaults.standard.data(forKey: "brewMethods"),
+           let saved = try? JSONDecoder().decode([BrewMethod].self, from: data) {
+            methods = saved
+        }
+
+        if let index = methods.firstIndex(where: { $0.id == editingMethod.id }) {
+            methods[index] = updatedMethod
+        }
+
+        if let data = try? JSONEncoder().encode(methods) {
+            UserDefaults.standard.set(data, forKey: "brewMethods")
+        }
     }
 }

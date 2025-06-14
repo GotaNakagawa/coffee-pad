@@ -20,19 +20,24 @@ struct BrewMethodConfirmView: View {
     }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                self.confirmationMessage
-                self.heroImageSection
-                self.titleSection
-                self.brewMethodDetailsSection
-                if !self.steps.isEmpty {
-                    self.stepsSection
-                }
-                if !self.grindMemo.isEmpty {
-                    self.commentSection
+        ZStack(alignment: .top) {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Spacer()
+                        .frame(height: 60)
+                    self.heroImageSection
+                    self.titleSection
+                    self.brewMethodDetailsSection
+                    if !self.steps.isEmpty {
+                        self.stepsSection
+                    }
+                    if !self.grindMemo.isEmpty {
+                        self.commentSection
+                    }
                 }
             }
+
+            self.fixedConfirmationMessage
         }
         .enableInjection()
     }
@@ -82,14 +87,16 @@ struct BrewMethodConfirmView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private var confirmationMessage: some View {
+    private var fixedConfirmationMessage: some View {
         VStack {
             Text("この内容で正しいですか？")
                 .font(.headline)
                 .foregroundColor(.primary)
         }
         .frame(maxWidth: .infinity)
-        .padding(.bottom, 8)
+        .padding(.top, 8)
+        .padding(.bottom, 16)
+        .background(Color(UIColor.systemBackground).opacity(0.95))
     }
 
     private var brewMethodDetailsSection: some View {
