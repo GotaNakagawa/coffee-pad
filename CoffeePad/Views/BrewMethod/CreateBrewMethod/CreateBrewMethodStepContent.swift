@@ -88,7 +88,8 @@ struct CreateBrewMethodStepContent: View {
                 coffeeAmount: self.coffeeAmount,
                 coffeeVolume: self.coffeeVolume,
                 waterTemp: self.waterTemp,
-                steps: self.brewSteps
+                steps: self.brewSteps,
+                iconData: self.selectedIconData
             )
         }
     }
