@@ -20,6 +20,17 @@ struct BrewMethodDetailView: View {
         .enableInjection()
     }
 
+    private func deleteMethod() {
+        if let data = UserDefaults.standard.data(forKey: "brewMethods"),
+           var methods = try? JSONDecoder().decode([BrewMethod].self, from: data) {
+            methods.removeAll { $0.id == self.method.id }
+            if let encoded = try? JSONEncoder().encode(methods) {
+                UserDefaults.standard.set(encoded, forKey: "brewMethods")
+            }
+        }
+        self.dismiss()
+    }
+
     private var navigationBackButton: some View {
         HStack {
             Image(systemName: "chevron.left")
@@ -31,6 +42,36 @@ struct BrewMethodDetailView: View {
                     self.dismiss()
                 }
             Spacer()
+            Menu(
+                content: {
+                    Button(
+                        action: { print("共有が選択されました") },
+                        label: {
+                            Label("共有", systemImage: "square.and.arrow.up")
+                        }
+                    )
+                    Button(
+                        action: { print("保存が選択されました") },
+                        label: {
+                            Label("保存", systemImage: "square.and.arrow.down")
+                        }
+                    )
+                    Button(
+                        role: .destructive,
+                        action: { self.deleteMethod() },
+                        label: {
+                            Label("削除", systemImage: "trash")
+                        }
+                    )
+                },
+                label: {
+                    Image(systemName: "ellipsis")
+                        .font(.title2)
+                        .frame(width: 44, height: 44)
+                        .foregroundColor(.primary)
+                }
+            )
+            .padding(.trailing, 20)
         }
         .padding(.top, 24)
         .padding(.bottom, 8)
