@@ -6,6 +6,7 @@ disabled_rules:
   - redundant_optional_initialization
   - function_body_length
   - closure_parameter_position
+  - trailing_closure
 
 opt_in_rules:
   - array_init
@@ -59,7 +60,6 @@ opt_in_rules:
   - strict_fileprivate
   - switch_case_on_newline
   - toggle_bool
-  - trailing_closure
   - unavailable_function
   - unneeded_parentheses_in_closure_argument
   - untyped_error_in_catch

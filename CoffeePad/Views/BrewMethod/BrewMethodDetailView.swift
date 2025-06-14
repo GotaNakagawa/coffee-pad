@@ -64,6 +64,10 @@ struct BrewMethodDetailView: View {
                                 .frame(width: 250, height: 250)
                                 .clipped()
                                 .cornerRadius(12)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12)
+                                        .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                                )
                         } else {
                             Text("RWS")
                                 .font(.system(size: 48, weight: .bold))
