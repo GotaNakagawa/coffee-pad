@@ -1,17 +1,55 @@
 import Inject
 import SwiftUI
 
+enum SortOrder {
+    case newest // 新しい順
+    case oldest // 古い順
+}
+
 struct BrewMethodListView: View {
     @ObserveInjection var inject
     @Environment(\.dismiss) private var dismiss
 
     @State private var methods: [BrewMethod] = []
+    @State private var sortOrder: SortOrder = .newest
 
     let colors: [Color] = [
         Color("DeepGreen"),
         Color("LightBeige"),
         Color("DarkBrown")
     ]
+
+    var sortedMethods: [BrewMethod] {
+        switch self.sortOrder {
+        case .newest:
+            self.methods.sorted { $0.id > $1.id }
+        case .oldest:
+            self.methods.sorted { $0.id < $1.id }
+        }
+    }
+
+    var statsWithSortButtons: some View {
+        HStack {
+            BrewMethodListStats(methods: self.methods)
+
+            Spacer()
+
+            Button(
+                action: {
+                    self.sortOrder = self.sortOrder == .oldest ? .newest : .oldest
+                },
+                label: {
+                    HStack(spacing: 4) {
+                        Text(self.sortOrder == .newest ? "新しい順" : "古い順")
+                            .bold()
+                            .foregroundColor(Color("DeepGreen"))
+                        Image(systemName: "arrow.up.arrow.down")
+                            .foregroundColor(Color("DeepGreen"))
+                    }
+                }
+            )
+        }
+    }
 
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
@@ -20,11 +58,11 @@ struct BrewMethodListView: View {
 
                 Spacer()
 
-                BrewMethodListStats(methods: self.methods)
+                self.statsWithSortButtons
 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 16) {
-                        ForEach(Array(self.methods.enumerated()), id: \.1.id) { index, method in
+                        ForEach(Array(self.sortedMethods.enumerated()), id: \.1.id) { index, method in
                             let color = self.colors[index % self.colors.count]
                             BrewMethodRow(
                                 method: method,
