@@ -76,15 +76,32 @@ struct BrewMethodListView: View {
             }
             .padding()
 
-            NavigationLink(destination: CreateBrewMethodView()) {
-                Image(systemName: "plus")
-                    .font(.title)
-                    .foregroundColor(Color.primary)
-                    .frame(width: 56, height: 56)
+            HStack {
+                NavigationLink(destination: YouTubeBrewMethodCreateView()) {
+                    HStack {
+                        Image(systemName: "play.rectangle.fill")
+                            .font(.title2)
+                            .foregroundColor(.red)
+                        Text("YouTubeから作成")
+                            .foregroundColor(.primary)
+                            .font(.body)
+                    }
+                    .frame(height: 56)
+                    .padding(.horizontal, 16)
                     .background(Color.white)
                     .cornerRadius(12)
                     .shadow(radius: 4)
-                    .padding()
+                }
+                NavigationLink(destination: CreateBrewMethodView()) {
+                    Image(systemName: "plus")
+                        .font(.title)
+                        .foregroundColor(Color.primary)
+                        .frame(width: 56, height: 56)
+                        .background(Color.white)
+                        .cornerRadius(12)
+                        .shadow(radius: 4)
+                        .padding()
+                }
             }
         }
         .navigationBarHidden(true)
