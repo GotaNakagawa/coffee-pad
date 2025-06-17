@@ -69,6 +69,8 @@ private struct BrewMethodDetails: View {
                 Text(self.method.comment.components(separatedBy: .newlines).first ?? "")
                     .font(.caption)
                     .foregroundColor(.gray)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
 
                 HStack(spacing: 16) {
                     HStack(spacing: 4) {
