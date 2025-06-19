@@ -53,6 +53,14 @@ struct CreateBrewMethodIconSelection: View {
             }
         }
         .padding(.horizontal, 20)
+        .onChange(of: self.photoHandler.selectedItem) { _, newItem in
+            if newItem != nil {
+                self.photoHandler.startImageSelection()
+                DispatchQueue.main.async {
+                    self.photoHandler.objectWillChange.send()
+                }
+            }
+        }
         .enableInjection()
     }
 
