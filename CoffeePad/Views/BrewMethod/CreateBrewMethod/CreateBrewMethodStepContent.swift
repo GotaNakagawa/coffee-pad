@@ -18,6 +18,7 @@ struct CreateBrewMethodStepContent: View {
     @Binding var brewSteps: [BrewStep]
     @Binding var comment: String
     let grindOptions: [String]
+    let photoHandler: PhotoSelectionHandler
 
     var body: some View {
         self.stepContent
@@ -78,7 +79,8 @@ struct CreateBrewMethodStepContent: View {
             CreateBrewMethodIconSelection(
                 title: "メソッドアイコンを選択",
                 description: "メソッドを表す写真を選んでください",
-                selectedIconData: self.$selectedIconData
+                selectedIconData: self.$selectedIconData,
+                photoHandler: self.photoHandler
             )
         case .confirm:
             BrewMethodConfirmView(

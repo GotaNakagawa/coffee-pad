@@ -7,8 +7,7 @@ struct CreateBrewMethodIconSelection: View {
     let title: String
     let description: String
     @Binding var selectedIconData: Data?
-
-    @StateObject private var photoHandler = PhotoSelectionHandler(cropSize: Constants.cropSize)
+    @ObservedObject var photoHandler: PhotoSelectionHandler
 
     private enum Constants {
         static let cropSize: CGFloat = 280
@@ -54,6 +53,14 @@ struct CreateBrewMethodIconSelection: View {
             }
         }
         .padding(.horizontal, 20)
+        .onChange(of: self.photoHandler.selectedItem) { _, newItem in
+            if newItem != nil {
+                self.photoHandler.startImageSelection()
+                DispatchQueue.main.async {
+                    self.photoHandler.objectWillChange.send()
+                }
+            }
+        }
         .enableInjection()
     }
 

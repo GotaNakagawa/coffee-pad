@@ -10,11 +10,20 @@ class PhotoSelectionHandler: ObservableObject {
     @Published var lastOffset = CGSize.zero
     @Published var scale: CGFloat = 1.0
     @Published var lastScale: CGFloat = 1.0
+    @Published var isCropping = false
+    @Published var isEditingImage = false
 
     private let cropSize: CGFloat
 
     init(cropSize: CGFloat) {
         self.cropSize = cropSize
+    }
+
+    /// 画像選択開始時の状態設定
+    func startImageSelection() {
+        DispatchQueue.main.async {
+            self.isEditingImage = true
+        }
     }
 
     /// 画像選択処理
@@ -35,6 +44,8 @@ class PhotoSelectionHandler: ObservableObject {
             }
         } catch {
             print("画像の読み込みに失敗しました: \(error)")
+            // エラー時は編集状態をリセット
+            self.isEditingImage = false
         }
     }
 
@@ -43,6 +54,7 @@ class PhotoSelectionHandler: ObservableObject {
         let fixedImage = self.fixImageOrientation(image)
         self.selectedUIImage = fixedImage
         self.resetCropParameters()
+        self.isCropping = true
     }
 
     /// クロップパラメータをリセット
@@ -185,6 +197,10 @@ class PhotoSelectionHandler: ObservableObject {
     func completeCropping() -> Data? {
         let imageData = self.cropAndSaveImage()
         self.selectedUIImage = nil
+        self.isCropping = false
+        DispatchQueue.main.async {
+            self.isEditingImage = false
+        }
         return imageData
     }
 }
