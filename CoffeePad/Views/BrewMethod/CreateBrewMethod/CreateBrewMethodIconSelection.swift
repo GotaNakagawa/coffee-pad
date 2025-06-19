@@ -7,8 +7,7 @@ struct CreateBrewMethodIconSelection: View {
     let title: String
     let description: String
     @Binding var selectedIconData: Data?
-
-    @StateObject private var photoHandler = PhotoSelectionHandler(cropSize: Constants.cropSize)
+    @ObservedObject var photoHandler: PhotoSelectionHandler
 
     private enum Constants {
         static let cropSize: CGFloat = 280

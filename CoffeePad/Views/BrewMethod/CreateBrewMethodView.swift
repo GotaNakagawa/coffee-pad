@@ -15,6 +15,7 @@ struct CreateBrewMethodView: View {
     @State private var brewSteps: [BrewStep] = []
     @State private var comment: String = ""
     @State private var selectedIconData: Data?
+    @State private var photoHandler = PhotoSelectionHandler(cropSize: 280)
 
     private let editingMethod: BrewMethod?
     private let isEditMode: Bool
@@ -41,7 +42,7 @@ struct CreateBrewMethodView: View {
         case .coffeeVolume:
             Int(self.coffeeVolume) != nil
         case .iconSelection:
-            true
+            !self.photoHandler.isCropping
         default:
             true
         }
@@ -95,7 +96,8 @@ struct CreateBrewMethodView: View {
             coffeeVolume: self.$coffeeVolume,
             brewSteps: self.$brewSteps,
             comment: self.$comment,
-            grindOptions: self.grindOptions
+            grindOptions: self.grindOptions,
+            photoHandler: self.photoHandler
         )
         .animation(.easeInOut, value: self.currentStep)
     }

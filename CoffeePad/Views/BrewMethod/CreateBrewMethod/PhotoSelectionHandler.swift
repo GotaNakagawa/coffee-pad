@@ -10,6 +10,7 @@ class PhotoSelectionHandler: ObservableObject {
     @Published var lastOffset = CGSize.zero
     @Published var scale: CGFloat = 1.0
     @Published var lastScale: CGFloat = 1.0
+    @Published var isCropping = false
 
     private let cropSize: CGFloat
 
@@ -43,6 +44,7 @@ class PhotoSelectionHandler: ObservableObject {
         let fixedImage = self.fixImageOrientation(image)
         self.selectedUIImage = fixedImage
         self.resetCropParameters()
+        self.isCropping = true
     }
 
     /// クロップパラメータをリセット
@@ -185,6 +187,7 @@ class PhotoSelectionHandler: ObservableObject {
     func completeCropping() -> Data? {
         let imageData = self.cropAndSaveImage()
         self.selectedUIImage = nil
+        self.isCropping = false
         return imageData
     }
 }
