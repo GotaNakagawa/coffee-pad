@@ -65,6 +65,8 @@ private struct BrewMethodDetails: View {
             VStack(alignment: .leading) {
                 Text(self.method.title)
                     .font(.headline)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
 
                 Text(self.method.comment.components(separatedBy: .newlines).first ?? "")
                     .font(.caption)
@@ -102,6 +104,8 @@ private struct BrewMethodDetails: View {
                     }
                 }
                 .font(.caption)
+                .lineLimit(1)
+                .truncationMode(.tail)
             }
         }
         .padding()
