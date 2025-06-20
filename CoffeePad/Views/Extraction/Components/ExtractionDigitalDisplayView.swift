@@ -11,13 +11,13 @@ struct ExtractionDigitalDisplayView: View {
             self.digitalCounter(
                 title: "時間",
                 value: self.formatTime(self.currentTime),
-                color: .green
+                color: Color.white
             )
 
             self.digitalCounter(
                 title: "重量",
                 value: "\(self.currentWeight)g",
-                color: .blue
+                color: Color.white
             )
         }
         .padding(.vertical, 20)
@@ -28,7 +28,7 @@ struct ExtractionDigitalDisplayView: View {
         VStack(spacing: 8) {
             Text(title)
                 .font(.caption)
-                .foregroundColor(.secondary)
+                .foregroundColor(Color("DarkBrown"))
 
             Text(value)
                 .font(.system(size: 24, design: .monospaced))
@@ -37,7 +37,7 @@ struct ExtractionDigitalDisplayView: View {
                 .frame(minWidth: 80)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
-                .background(Color(.systemGray5))
+                .background(Color("DarkBrown"))
                 .cornerRadius(8)
         }
     }

@@ -15,23 +15,32 @@ struct ExtractionControlsView: View {
         HStack(spacing: 60) {
             Button(action: self.onPrevious) {
                 Image(systemName: "backward.fill")
-                    .font(.title)
-                    .foregroundColor(self.currentStepIndex > 0 ? .primary : .secondary)
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(self.currentStepIndex > 0 ? Color("DarkBrown") : Color(.systemGray4))
+                    .clipShape(Circle())
             }
             .disabled(self.currentStepIndex <= 0)
 
             if let step = currentStep, step.time != nil {
                 Button(action: self.onPlayPause) {
                     Image(systemName: self.isPlaying ? "pause.fill" : "play.fill")
-                        .font(.system(size: 50))
-                        .foregroundColor(.primary)
+                        .font(.system(size: 30))
+                        .foregroundColor(.white)
+                        .frame(width: 70, height: 70)
+                        .background(Color("DeepGreen"))
+                        .clipShape(Circle())
                 }
             }
 
             Button(action: self.onNext) {
                 Image(systemName: "forward.fill")
-                    .font(.title)
-                    .foregroundColor(self.currentStepIndex < self.totalSteps - 1 ? .primary : .secondary)
+                    .font(.title2)
+                    .foregroundColor(.white)
+                    .frame(width: 50, height: 50)
+                    .background(self.currentStepIndex < self.totalSteps - 1 ? Color("DeepGreen") : Color(.systemGray4))
+                    .clipShape(Circle())
             }
             .disabled(self.currentStepIndex >= self.totalSteps - 1)
         }

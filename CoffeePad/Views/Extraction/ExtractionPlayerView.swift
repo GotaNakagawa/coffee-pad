@@ -73,7 +73,7 @@ struct ExtractionPlayerView: View {
             Button(
                 action: { self.dismiss() },
                 label: {
-                    Image(systemName: "chevron.down")
+                    Image(systemName: "chevron.left")
                         .font(.title2)
                         .foregroundColor(.primary)
                 }
@@ -85,9 +85,6 @@ struct ExtractionPlayerView: View {
                 Text(self.brewMethod.title)
                     .font(.headline)
                     .foregroundColor(.primary)
-                Text("抽出実行")
-                    .font(.caption)
-                    .foregroundColor(.secondary)
             }
 
             Spacer()
