@@ -16,7 +16,7 @@ struct CoffeePadApp: App {
 
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            SplashScreenView()
         }
         .modelContainer(self.sharedModelContainer)
     }

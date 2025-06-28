@@ -6,6 +6,7 @@ struct BrewMethodDetailView: View {
     let method: BrewMethod
     @Environment(\.dismiss) private var dismiss
     @State private var navigateToEdit = false
+    @State private var navigateToExtraction = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -16,6 +17,9 @@ struct BrewMethodDetailView: View {
         .navigationBarBackButtonHidden(true)
         .navigationDestination(isPresented: self.$navigateToEdit) {
             CreateBrewMethodView(editingMethod: self.method)
+        }
+        .navigationDestination(isPresented: self.$navigateToExtraction) {
+            ExtractionPlayerView(brewMethod: self.method)
         }
         .enableInjection()
     }
@@ -119,7 +123,7 @@ struct BrewMethodDetailView: View {
     private var playButton: some View {
         Button(
             action: {
-                print("再生ボタンがタップされました")
+                self.navigateToExtraction = true
             },
             label: {
                 HStack {
